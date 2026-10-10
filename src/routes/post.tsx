@@ -57,7 +57,7 @@ function PostPage() {
           kept_at: kind === "found" ? s("kept_at") : null,
           contact_name: s("contact_name")!,
           contact_info: s("contact_info"),
-          item_date: s("item_date") ?? undefined,
+          item_date: s("item_date") ?? new Date().toISOString().slice(0, 10),
           photo_url,
         })
         .select("id")
