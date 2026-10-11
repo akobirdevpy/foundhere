@@ -39,6 +39,10 @@ const D = {
   contact: { uz: "Aloqa", ru: "Контакт", en: "Contact" },
   rule: { uz: "Topilgan narsalarni maktab ma'muriyatiga topshiring", ru: "Сдавайте найденные вещи администрации школы", en: "Please hand found items to the school administration" },
   office: { uz: "Topilmalar xonasi", ru: "Бюро находок", en: "Lost & found office" },
+  loading: { uz: "Yuklanmoqda...", ru: "Загрузка...", en: "Loading..." },
+  loadError: { uz: "Ma'lumotlarni yuklab bo'lmadi. Sahifani yangilang.", ru: "Не удалось загрузить данные. Обновите страницу.", en: "Could not load data. Please refresh." },
+  emptyHint: { uz: "Birinchi bo'lib e'lon joylang!", ru: "Станьте первым, кто разместит объявление!", en: "Be the first to post!" },
+  photoTooBig: { uz: "Rasm 5 MB dan oshmasligi kerak", ru: "Фото не должно превышать 5 МБ", en: "Photo must be under 5 MB" },
   back: { uz: "Orqaga", ru: "Назад", en: "Back" },
   viewAll: { uz: "Hammasini ko'rish", ru: "Смотреть все", en: "View all" },
   // categories

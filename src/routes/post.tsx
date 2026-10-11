@@ -39,6 +39,10 @@ function PostPage() {
     try {
       let photo_url: string | null = null;
       const file = f.get("photo") as File | null;
+      if (file && file.size > 5 * 1024 * 1024) {
+        toast.error(t("photoTooBig"));
+        return;
+      }
       if (file && file.size > 0) {
         const path = `${crypto.randomUUID()}.${file.name.split(".").pop() ?? "jpg"}`;
         const { error } = await supabase.storage.from("item-photos").upload(path, file, { contentType: file.type });

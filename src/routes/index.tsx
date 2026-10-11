@@ -21,15 +21,15 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const { t } = useI18n();
-  const { data = [] } = useQuery(itemsQuery());
+  const { data = [], isLoading, isError } = useQuery(itemsQuery());
   return (
     <>
       <section className="bg-primary text-primary-foreground star-pattern">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-[1.4fr_1fr] md:py-24">
+        <div className="mx-auto grid max-w-6xl items-center gap-6 px-4 py-8 md:grid-cols-[1.4fr_1fr] md:py-24">
           <div>
-            <h1 className="text-4xl font-bold leading-tight md:text-6xl">{t("heroTitle")}</h1>
-            <p className="mt-4 text-lg text-accent">{t("heroSub")}</p>
-            <div className="mt-8 flex flex-wrap gap-4">
+            <h1 className="text-3xl font-bold leading-tight sm:text-4xl md:text-6xl">{t("heroTitle")}</h1>
+            <p className="mt-3 text-base text-accent md:mt-4 md:text-lg">{t("heroSub")}</p>
+            <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:gap-4 md:mt-8">
               <Button asChild variant="heroLight" size="xl">
                 <Link to="/post" search={{ kind: "lost" }}><SearchX /> {t("iLost")}</Link>
               </Button>
@@ -38,7 +38,7 @@ function Index() {
               </Button>
             </div>
           </div>
-          <Logo className="mx-auto w-56 rounded-3xl shadow-2xl ring-4 ring-accent/40 md:w-80" />
+          <Logo className="mx-auto hidden w-56 rounded-3xl md:block shadow-2xl ring-4 ring-accent/40 md:w-80" />
         </div>
       </section>
       <div className="star-divider" />
@@ -47,8 +47,12 @@ function Index() {
           <h2 className="text-3xl font-semibold text-primary">{t("recent")}</h2>
           <Link to="/items" className="text-sm font-medium text-primary hover:underline">{t("viewAll")} →</Link>
         </div>
-        {data.length === 0 ? (
-          <p className="text-muted-foreground">{t("empty")}</p>
+        {isLoading ? (
+          <p className="text-muted-foreground">{t("loading")}</p>
+        ) : isError ? (
+          <p className="text-destructive">{t("loadError")}</p>
+        ) : data.length === 0 ? (
+          <p className="text-muted-foreground">{t("empty")}. {t("emptyHint")}</p>
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {data.slice(0, 8).map((i) => <ItemCard key={i.id} item={i} />)}
