@@ -12,21 +12,21 @@ export function SiteHeader() {
   const { t, lang, setLang } = useI18n();
   return (
     <header className="sticky top-0 z-30 bg-primary text-primary-foreground shadow-md">
-      <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3">
-        <Link to="/" className="flex items-center gap-3">
-          <Logo className="h-11 w-11" />
-          <div className="leading-tight">
-            <div className="font-serif text-lg font-semibold">{t("school")}</div>
-            <div className="text-xs text-accent">{t("subLabel")}</div>
+      <div className="mx-auto flex max-w-6xl items-center gap-2 px-3 py-1.5 md:gap-3 md:px-4 md:py-3">
+        <Link to="/" className="flex min-w-0 items-center gap-2 md:gap-3">
+          <Logo className="h-8 w-8 shrink-0 md:h-11 md:w-11" />
+          <div className="min-w-0 leading-tight">
+            <div className="truncate font-serif text-sm font-semibold md:text-lg">{t("school")}</div>
+            <div className="hidden text-xs text-accent sm:block">{t("subLabel")}</div>
           </div>
         </Link>
-        <nav className="ml-auto hidden items-center gap-5 text-sm md:flex">
-          <Link to="/" className="opacity-80 hover:opacity-100" activeOptions={{ exact: true }} activeProps={{ className: "opacity-100 font-semibold" }}>{t("home")}</Link>
+        <nav className="ml-auto flex shrink-0 items-center gap-3 text-xs md:gap-5 md:text-sm">
+          <Link to="/" className="hidden opacity-80 hover:opacity-100 md:inline" activeOptions={{ exact: true }} activeProps={{ className: "opacity-100 font-semibold" }}>{t("home")}</Link>
           <Link to="/items" className="opacity-80 hover:opacity-100" activeProps={{ className: "opacity-100 font-semibold" }}>{t("browse")}</Link>
         </nav>
-        <div className="ml-auto flex rounded-lg bg-primary-foreground/10 p-1 text-xs md:ml-4">
+        <div className="flex shrink-0 rounded-lg bg-primary-foreground/10 p-0.5 text-[11px] md:ml-2 md:p-1 md:text-xs">
           {(["uz", "ru", "en"] as Lang[]).map((l) => (
-            <button key={l} onClick={() => setLang(l)} className={cn("rounded-md px-2 py-1 uppercase", lang === l && "bg-accent text-accent-foreground font-semibold")}>
+            <button key={l} onClick={() => setLang(l)} aria-label={l} className={cn("rounded-md px-1.5 py-0.5 uppercase md:px-2 md:py-1", lang === l && "bg-accent text-accent-foreground font-semibold")}>
               {l}
             </button>
           ))}

@@ -1,6 +1,4 @@
-export const CLASSES = Array.from({ length: 11 }, (_, i) =>
-  ["A", "B", "V", "G", "D"].map((l) => `${i + 1}-${l}`),
-).flat();
+export const CLASSES = [5, 6, 7, 8, 9, 10, 11].flatMap((g) => ["A", "B", "D", "E"].map((l) => `${g}-${l}`));
 
 export const LOCATIONS = [
   "classroom", "canteen", "sports_hall", "library", "corridor",
