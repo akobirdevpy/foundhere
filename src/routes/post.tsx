@@ -10,7 +10,7 @@ import { CATEGORIES, CLASSES, KEPT_AT, LOCATIONS } from "@/lib/options";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/post")({
-  validateSearch: (s: Record<string, unknown>) => ({ kind: s.kind === "found" ? "found" : "lost" }) as { kind: "lost" | "found" },
+  validateSearch: (s: Record<string, unknown>) => ({ kind: s["kind"] === "found" ? "found" : "lost" }) as { kind: "lost" | "found" },
   head: () => ({
     meta: [
       { title: "E'lon joylash | Kogon ixtisoslashtirilgan maktabi" },
