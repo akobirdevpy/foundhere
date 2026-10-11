@@ -8,6 +8,13 @@
       "when": 1791611677123,
       "tag": "0000_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791731289491,
+      "tag": "0001_class_constraint",
+      "breakpoints": true
     }
   ]
 }

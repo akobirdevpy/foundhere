@@ -20,11 +20,11 @@ export const Route = createFileRoute("/items/")({
   component: Browse,
 });
 
-const sel = "h-9 rounded-md border bg-card px-3 text-sm";
+const sel = "h-9 w-full sm:w-auto rounded-md border bg-card px-3 text-sm";
 
 function Browse() {
   const { t } = useI18n();
-  const { data = [], isLoading } = useQuery(itemsQuery());
+  const { data = [], isLoading, isError } = useQuery(itemsQuery());
   const [kind, setKind] = useState("all");
   const [cat, setCat] = useState("");
   const [loc, setLoc] = useState("");
@@ -52,7 +52,7 @@ function Browse() {
             </button>
           ))}
         </div>
-        <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("search")} className="w-56 bg-card" />
+        <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("search")} className="w-full bg-card sm:w-56" />
         <select className={sel} value={cat} onChange={(e) => setCat(e.target.value)}>
           <option value="">{t("category")}: {t("all")}</option>
           {CATEGORIES.map((c) => <option key={c} value={c}>{t(c)}</option>)}
@@ -62,7 +62,9 @@ function Browse() {
           {LOCATIONS.map((c) => <option key={c} value={c}>{t(c)}</option>)}
         </select>
       </div>
-      {!isLoading && list.length === 0 && <p className="text-muted-foreground">{t("empty")}</p>}
+      {isLoading && <p className="text-muted-foreground">{t("loading")}</p>}
+      {isError && <p className="text-destructive">{t("loadError")}</p>}
+      {!isLoading && !isError && list.length === 0 && <p className="text-muted-foreground">{t("empty")}</p>}
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {list.map((i) => <ItemCard key={i.id} item={i} />)}
       </div>

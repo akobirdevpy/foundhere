@@ -21,10 +21,11 @@ export const Route = createFileRoute("/items/$id")({
 function Detail() {
   const { id } = Route.useParams();
   const { t } = useI18n();
-  const { data = [], isLoading } = useQuery(itemsQuery());
+  const { data = [], isLoading, isError } = useQuery(itemsQuery());
   const item = data.find((i) => i.id === id);
   const url = usePhotoUrl(item?.photo_url ?? null);
-  if (isLoading) return null;
+  if (isLoading) return <p className="p-10 text-center text-muted-foreground">{t("loading")}</p>;
+  if (isError) return <p className="p-10 text-center text-destructive">{t("loadError")}</p>;
   if (!item) return <p className="p-10 text-center text-muted-foreground">{t("empty")}</p>;
   const matches = findMatches(item, data);
   const rows: [string, string | null][] = [
@@ -44,7 +45,7 @@ function Detail() {
         </div>
         <div>
           <KindBadge kind={item.kind} />
-          <h1 className="mt-3 text-4xl font-bold text-primary">{item.title}</h1>
+          <h1 className="mt-3 text-3xl font-bold text-primary md:text-4xl">{item.title}</h1>
           {item.description && <p className="mt-3 text-muted-foreground">{item.description}</p>}
           <dl className="mt-6 divide-y rounded-xl border bg-card">
             {rows.filter(([, v]) => v).map(([k, v]) => (
