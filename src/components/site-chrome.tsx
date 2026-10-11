@@ -12,9 +12,9 @@ export function SiteHeader() {
   const { t, lang, setLang } = useI18n();
   return (
     <header className="sticky top-0 z-30 bg-primary text-primary-foreground shadow-md">
-      <div className="mx-auto flex max-w-6xl items-center gap-2 px-3 py-1.5 md:gap-3 md:px-4 md:py-3">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 px-3 md:h-16 md:gap-3 md:px-4">
         <Link to="/" className="flex min-w-0 items-center gap-2 md:gap-3">
-          <Logo className="h-8 w-8 shrink-0 md:h-11 md:w-11" />
+          <Logo className="h-8 w-auto shrink-0 object-contain md:h-9 md:w-auto" />
           <div className="min-w-0 leading-tight">
             <div className="truncate font-serif text-sm font-semibold md:text-lg">{t("school")}</div>
             <div className="hidden text-xs text-accent sm:block">{t("subLabel")}</div>
