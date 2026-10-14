@@ -8,6 +8,7 @@ import { findMatches, itemsQuery, usePhotoUrl } from "@/lib/items";
 export const Route = createFileRoute("/items/$id")({
   head: () => ({
     meta: [
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "E'lon | Kogon ixtisoslashtirilgan maktabi" },
       { name: "description", content: "Yo'qolgan yoki topilgan narsa haqida e'lon." },
       { property: "og:title", content: "E'lon | Kogon ixtisoslashtirilgan maktabi" },
