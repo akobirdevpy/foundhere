@@ -64,10 +64,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:site_name", content: "Kogon ixtisoslashtirilgan maktabi" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:image", content: "/logo.jpg" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "icon", type: "image/jpeg", href: "/favicon.jpg" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" },
