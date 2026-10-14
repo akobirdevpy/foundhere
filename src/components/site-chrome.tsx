@@ -1,14 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { Menu, X, MapPin, Phone, Mail, Clock, ArrowUpRight } from "lucide-react";
 import { useState } from "react";
-import logo from "@/assets/kogon-logo.png.asset.json";
+const logo = "/logo.jpg";
 import { useI18n, type Lang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 export function Logo({ className }: { className?: string }) {
   const { t } = useI18n();
-  return <img src={logo.url} alt={t("school")} className={cn("rounded-sm object-contain", className)} />;
+  return <img src={logo} alt="Kogon shahar ixtisoslashtirilgan maktabi logo" className={cn("rounded-sm object-contain", className)} />;
 }
 
 function Languages() {
