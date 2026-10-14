@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 export type Lang = "uz" | "ru" | "en";
 
 const D = {
-  school: { uz: "Kogon ixtisoslashtirilgan maktabi", ru: "Каганская специализированная школа", en: "Kogon Specialized School" },
+  school: { uz: "Kogon shahar ixtisoslashtirilgan maktabi", ru: "Специализированная школа города Каган", en: "Kogon City Specialized School" },
   subLabel: { uz: "Yo'qolgan va topilgan narsalar", ru: "Бюро находок", en: "Lost & found" },
   heroTitle: { uz: "Yo'qolgan narsangizni birga topamiz", ru: "Вместе найдём вашу потерянную вещь", en: "Let's find your lost item together" },
   heroSub: { uz: "Kogon ixtisoslashtirilgan maktabi — Topilmalar markazi", ru: "Каганская специализированная школа — Бюро находок", en: "Kogon Specialized School — Lost & Found Center" },
@@ -45,6 +45,43 @@ const D = {
   photoTooBig: { uz: "Rasm 5 MB dan oshmasligi kerak", ru: "Фото не должно превышать 5 МБ", en: "Photo must be under 5 MB" },
   back: { uz: "Orqaga", ru: "Назад", en: "Back" },
   viewAll: { uz: "Hammasini ko'rish", ru: "Смотреть все", en: "View all" },
+  officialService: { uz: "Rasmiy maktab xizmati", ru: "Официальный сервис школы", en: "Official school service" },
+  serviceTitle: { uz: "Topilmalar xizmati", ru: "Бюро находок", en: "Lost & Found Service" },
+  serviceSubtitle: { uz: "Kogon shahar ixtisoslashtirilgan maktabi — rasmiy topilmalar markazi", ru: "Специализированная школа города Каган — официальное бюро находок", en: "Kogon City Specialized School: official lost and found center" },
+  serviceDescription: { uz: "Yo‘qolgan yoki topilgan narsa haqida e’lon bering va uni egasiga qaytarishga yordam bering.", ru: "Сообщите о потерянной или найденной вещи и помогите вернуть её владельцу.", en: "Report a lost or found item and help it find its way back to its owner." },
+  searchItems: { uz: "Nomi yoki turkumi bo‘yicha qidirish", ru: "Поиск по названию или категории", en: "Search by item name or category" },
+  searchAction: { uz: "Qidirish", ru: "Найти", en: "Search" },
+  howWorks: { uz: "Qanday ishlaydi", ru: "Как это работает", en: "How it works" },
+  stepReport: { uz: "Narsa haqida e’lon bering", ru: "Сообщите о вещи", en: "Report an item" },
+  stepReportText: { uz: "Narsa tavsifi, topilgan yoki yo‘qolgan joyi va rasmini kiriting.", ru: "Добавьте описание, место потери или находки и фотографию.", en: "Add a description, a location and a photo of the item." },
+  stepMatch: { uz: "Moslikni tekshiring", ru: "Сопоставьте и проверьте", en: "Match and verify" },
+  stepMatchText: { uz: "Mos e’lonlarni ko‘ring va narsa sizniki ekanini maktab xodimiga tasdiqlang.", ru: "Найдите похожие объявления и подтвердите сотруднику школы, что вещь ваша.", en: "Review possible matches and verify ownership with school staff." },
+  stepCollect: { uz: "Maktabdan olib keting", ru: "Заберите в школе", en: "Collect from the school office" },
+  stepCollectText: { uz: "Narsani olish uchun maktab ma’muriyatiga murojaat qiling.", ru: "Обратитесь к администрации школы, чтобы забрать вещь.", en: "Contact the school administration to collect your item." },
+  recentAnnouncements: { uz: "So‘nggi e’lonlar", ru: "Последние объявления", en: "Recent announcements" },
+  noAnnouncements: { uz: "Hozircha e’lonlar yo‘q", ru: "Объявлений пока нет", en: "No announcements yet" },
+  noAnnouncementsText: { uz: "Yangi e’lonlar shu yerda ko‘rinadi. Yo‘qotgan yoki topgan narsangiz haqida e’lon bering.", ru: "Новые объявления появятся здесь. Сообщите о потерянной или найденной вещи.", en: "New announcements will appear here. Report something you have lost or found." },
+  retry: { uz: "Qayta urinish", ru: "Повторить", en: "Try again" },
+  officialInformation: { uz: "Rasmiy ma’lumot", ru: "Официальная информация", en: "Official information" },
+  collectionPoint: { uz: "Narsalarni olish joyi", ru: "Место выдачи вещей", en: "Collection point" },
+  administration: { uz: "Maktab ma’muriyati", ru: "Администрация школы", en: "School administration" },
+  workingHours: { uz: "Ish vaqti", ru: "Часы работы", en: "Working hours" },
+  confirmOffice: { uz: "Xona raqamini ma’muriyatdan aniqlashtiring", ru: "Уточните номер кабинета у администрации", en: "Confirm the room with the administration" },
+  confirmHours: { uz: "Maktab ma’muriyatidan aniqlashtiring", ru: "Уточните у администрации школы", en: "Confirm with the school administration" },
+  phone: { uz: "Telefon", ru: "Телефон", en: "Phone" },
+  email: { uz: "Elektron pochta", ru: "Электронная почта", en: "Email" },
+  notProvided: { uz: "Hali ko‘rsatilmagan", ru: "Пока не указан", en: "Not yet provided" },
+  responsibleStaff: { uz: "Mas’ul xodim", ru: "Ответственный сотрудник", en: "Responsible staff member" },
+  unclaimedNote: { uz: "30 kun ichida olib ketilmagan narsalar maktab ma’muriyatiga topshiriladi.", ru: "Вещи, не востребованные в течение 30 дней, передаются администрации школы.", en: "Items not claimed within 30 days are handed to the administration." },
+  quickLinks: { uz: "Tezkor havolalar", ru: "Быстрые ссылки", en: "Quick links" },
+  contactUs: { uz: "Aloqa", ru: "Контакты", en: "Contact" },
+  address: { uz: "Manzil", ru: "Адрес", en: "Address" },
+  city: { uz: "Kogon, O‘zbekiston", ru: "Каган, Узбекистан", en: "Kogon, Uzbekistan" },
+  rightsReserved: { uz: "Barcha huquqlar himoyalangan.", ru: "Все права защищены.", en: "All rights reserved." },
+  menu: { uz: "Menyuni ochish", ru: "Открыть меню", en: "Open menu" },
+  closeMenu: { uz: "Menyuni yopish", ru: "Закрыть меню", en: "Close menu" },
+  returned: { uz: "Qaytarilgan", ru: "Возвращено", en: "Returned" },
+  noPhoto: { uz: "Rasm mavjud emas", ru: "Нет фотографии", en: "No photo available" },
   // categories
   bag: { uz: "Sumka", ru: "Сумка", en: "Bag" },
   clothes: { uz: "Kiyim", ru: "Одежда", en: "Clothes" },
@@ -83,11 +120,12 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("uz");
   useEffect(() => {
     const s = localStorage.getItem("lang") as Lang | null;
-    if (s === "ru" || s === "en") setLangState(s);
+    if (s === "ru" || s === "en") { setLangState(s); document.documentElement.lang = s; }
   }, []);
   const setLang = (l: Lang) => {
     setLangState(l);
     localStorage.setItem("lang", l);
+    document.documentElement.lang = l;
   };
   const t = (k: string) => (D as Record<string, Record<Lang, string>>)[k]?.[lang] ?? k;
   return <Ctx.Provider value={{ lang, setLang, t }}>{children}</Ctx.Provider>;

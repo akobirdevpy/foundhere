@@ -13,6 +13,8 @@ export const Route = createFileRoute("/post")({
   validateSearch: (s: Record<string, unknown>) => ({ kind: s["kind"] === "found" ? "found" : "lost" }) as { kind: "lost" | "found" },
   head: () => ({
     meta: [
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:type", content: "website" },
       { title: "E'lon joylash | Kogon ixtisoslashtirilgan maktabi" },
       { name: "description", content: "Yo'qolgan yoki topilgan narsa haqida e'lon joylang." },
       { property: "og:title", content: "E'lon joylash | Kogon ixtisoslashtirilgan maktabi" },

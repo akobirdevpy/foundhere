@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep shared school identity and navigation in site-chrome, with homepage content in the index route, so all existing flows retain a consistent institutional shell.
+- Store browse filters in validated route search parameters so homepage searches and shared URLs open the same results.
