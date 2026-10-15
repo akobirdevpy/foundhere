@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ItemCard } from "@/components/item-card";
 import { itemsQuery, type Item } from "@/lib/items";
-import { forgetReport, getLocalReports } from "@/lib/report-ownership";
+import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -12,24 +12,25 @@ export const Route = createFileRoute("/my-reports")({ component: MyReportsPage }
 
 function MyReportsPage() {
   const { t } = useI18n();
+  const { user, loading } = useAuth();
   const nav = useNavigate();
   const qc = useQueryClient();
   const { data = [], isLoading, isError, refetch } = useQuery(itemsQuery());
   const [busy, setBusy] = useState<string | null>(null);
-  const ids = new Set(getLocalReports().map((report) => report.id));
-  const reports = data.filter((item) => ids.has(item.id));
+  const reports = user ? data.filter((item) => (item as any).owner_user_id === user.id && !(item as any).owner_deleted_at) : [];
 
   async function remove(item: Item) {
     if (!window.confirm(t("deleteConfirm"))) return;
     setBusy(item.id);
-    const { error } = await supabase.from("items").update({ owner_deleted_at: new Date().toISOString() }).eq("id", item.id);
+    const { error } = await (supabase.from("items") as any).update({ owner_deleted_at: new Date().toISOString(), deleted_by_owner: true }).eq("id", item.id).eq("owner_user_id", user?.id);
     setBusy(null);
     if (error) return;
-    forgetReport(item.id);
     await qc.invalidateQueries({ queryKey: ["items"] });
     nav({ to: "/my-reports" });
   }
 
+  if (loading) return <main className="mx-auto max-w-6xl px-4 py-10">{t("loading")}</main>;
+  if (!user) return <main className="mx-auto max-w-md px-4 py-16 text-center"><p>{t("checkLogin")}</p><Button className="mt-6" onClick={() => nav({to:"/login"})}>{t("login")}</Button></main>;
   return <main className="mx-auto max-w-6xl px-4 py-10 md:px-6">
     <h1 className="text-3xl font-bold text-primary">{t("myReports")}</h1>
     <div className="star-divider my-4" />

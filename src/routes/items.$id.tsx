@@ -1,6 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/lib/auth";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "@tanstack/react-router";
 import { ItemCard, KindBadge } from "@/components/item-card";
 import { useI18n } from "@/lib/i18n";
 import { findMatches, itemsQuery, usePhotoUrl } from "@/lib/items";
@@ -22,6 +26,8 @@ export const Route = createFileRoute("/items/$id")({
 function Detail() {
   const { id } = Route.useParams();
   const { t } = useI18n();
+  const { user } = useAuth();
+  const nav = useNavigate();
   const { data = [], isLoading, isError } = useQuery(itemsQuery());
   const item = data.find((i) => i.id === id);
   const url = usePhotoUrl(item?.photo_url ?? null);
@@ -47,6 +53,7 @@ function Detail() {
         <div>
           <KindBadge kind={item.kind} />
           <h1 className="mt-3 text-3xl font-bold text-primary md:text-4xl">{item.title}</h1>
+          {(item as any).owner_user_id === user?.id && <div className="mt-4 flex gap-2"><Button onClick={() => nav({to:"/post", search:{kind: item.kind, edit: item.id}})}>{t("edit")}</Button><Button variant="outline" onClick={async()=>{if (!window.confirm(t("deleteConfirm"))) return; const {error}=await (supabase.from("items") as any).update({owner_deleted_at:new Date().toISOString(),deleted_by_owner:true}).eq("id",item.id).eq("owner_user_id",user.id); if(!error) nav({to:"/my-reports"});}}>{t("delete")}</Button></div>}
           {item.description && <p className="mt-3 text-muted-foreground">{item.description}</p>}
           <dl className="mt-6 divide-y rounded-xl border bg-card">
             {rows.filter(([, v]) => v).map(([k, v]) => (
