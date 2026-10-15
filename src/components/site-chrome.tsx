@@ -5,10 +5,20 @@ import logo from "@/assets/kogon-logo.png.asset.json";
 import { useI18n, type Lang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useSessionUser } from "@/hooks/use-session-user";
+import { supabase } from "@/integrations/supabase/client";
 
 export function Logo({ className }: { className?: string }) {
   const { t } = useI18n();
   return <img src={logo.url} alt={t("school")} className={cn("rounded-sm object-contain", className)} />;
+}
+
+function Account() {
+  const { t } = useI18n();
+  const { user, name, ready } = useSessionUser();
+  if (!ready) return null;
+  if (!user) return <Link to="/auth" className="flex min-h-10 items-center text-xs font-medium text-primary-foreground/90 hover:text-accent">{t("signIn")}</Link>;
+  return <div className="flex items-center gap-2 text-xs text-primary-foreground/90"><span className="max-w-[120px] truncate">{name}</span><Button variant="ghost" onClick={() => supabase.auth.signOut()} className="h-10 rounded-sm px-2 text-xs hover:bg-primary-foreground/10 hover:text-primary-foreground">{t("signOut")}</Button></div>;
 }
 
 function Languages() {
@@ -25,7 +35,7 @@ export function SiteHeader() {
   return <header className="relative z-30 bg-primary text-primary-foreground">
     <div className="border-b border-primary-foreground/15">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 md:px-6">
-        <span className="text-[11px] font-medium uppercase tracking-normal text-primary-foreground/75">{t("officialService")}</span><Languages />
+        <span className="text-[11px] font-medium uppercase tracking-normal text-primary-foreground/75">{t("officialService")}</span><div className="flex items-center gap-3"><Account /><Languages /></div>
       </div>
     </div>
     <div className="mx-auto flex min-h-20 max-w-6xl items-center justify-between gap-4 px-4 py-4 md:min-h-24 md:px-6">
