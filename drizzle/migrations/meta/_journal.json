@@ -15,6 +15,13 @@
       "when": 1791731289491,
       "tag": "0001_class_constraint",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792041714940,
+      "tag": "0002_profiles_table",
+      "breakpoints": true
     }
   ]
 }
