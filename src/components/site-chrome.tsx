@@ -3,6 +3,7 @@ import { Menu, X, MapPin, Phone, Mail, Clock, ArrowUpRight } from "lucide-react"
 import { useState } from "react";
 const logo = "/logo.jpg";
 import { useI18n, type Lang } from "@/lib/i18n";
+import { useAuth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -21,6 +22,7 @@ function Languages() {
 export function SiteHeader() {
   const { t } = useI18n();
   const [open, setOpen] = useState(false);
+  const { user, signOut } = useAuth();
   const close = () => setOpen(false);
   return <header className="relative z-30 bg-primary text-primary-foreground">
     <div className="border-b border-primary-foreground/15">
@@ -40,6 +42,7 @@ export function SiteHeader() {
         <Link to="/post" search={{ kind: "lost" }}>{t("iLost")}</Link>
         <Link to="/post" search={{ kind: "found" }}>{t("iFound")}</Link>
         <Link to="/" hash="contact">{t("contactUs")}</Link>
+        {user ? <button className="text-accent" onClick={() => void signOut()}>{t("logout")}</button> : <Link to="/login">{t("login")}</Link>}
       </nav>
       <Button variant="ghost" className="h-11 w-11 shrink-0 hover:bg-primary-foreground/10 hover:text-primary-foreground xl:hidden" aria-label={t(open ? "closeMenu" : "menu")} aria-expanded={open} aria-controls="school-nav" onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</Button>
     </div>
@@ -50,6 +53,7 @@ export function SiteHeader() {
       <Link onClick={close} to="/post" search={{ kind: "lost" }} className="flex min-h-12 items-center">{t("iLost")}</Link>
       <Link onClick={close} to="/post" search={{ kind: "found" }} className="flex min-h-12 items-center">{t("iFound")}</Link>
       <Link onClick={close} to="/" hash="contact" className="flex min-h-12 items-center">{t("contactUs")}</Link>
+      {user ? <button onClick={() => { close(); void signOut(); }} className="flex min-h-12 items-center">{t("logout")}</button> : <Link onClick={close} to="/login" className="flex min-h-12 items-center">{t("login")}</Link>}
     </nav>}
   </header>;
 }

@@ -1,13 +1,15 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type FormEvent, type ReactNode } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/lib/i18n";
+import { useAuth } from "@/lib/auth";
 import { CATEGORIES, CLASSES, KEPT_AT, LOCATIONS } from "@/lib/options";
 import { cn } from "@/lib/utils";
+import { itemsQuery } from "@/lib/items";
 import { generateManageCode, hashManageCode, rememberReport } from "@/lib/report-ownership";
 
 export const Route = createFileRoute("/post")({
@@ -33,6 +35,10 @@ function PostPage() {
   const nav = useNavigate();
   const qc = useQueryClient();
   const [busy, setBusy] = useState(false);
+  const { data: items = [] } = useQuery(itemsQuery());
+  const editItem = edit ? (items as any[]).find((item) => item.id === edit) : null;
+  const { user, profile } = useAuth();
+  if (!user) return <main className="mx-auto max-w-md px-4 py-16 text-center"><h1 className="text-2xl font-bold text-primary">{t("checkLogin")}</h1><Button className="mt-6" onClick={() => nav({to:"/login", search:{redirect:"/post"}})}>{t("login")}</Button></main>;
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -52,8 +58,12 @@ function PostPage() {
         if (error) throw error;
         photo_url = path;
       }
-      const manageCode = generateManageCode();
-      const owner_code_hash = await hashManageCode(manageCode);
+      const values = {
+        kind, title: s("title")!, description: s("description"), category: s("category")!, location: s("location")!, class_name: s("class_name"), kept_at: kind === "found" ? s("kept_at") : null, contact_name: s("contact_name")!, contact_info: s("contact_info"), item_date: s("item_date") ?? new Date().toISOString().slice(0, 10), photo_url, owner_user_id: user.id, custom_category: s("custom_category"), custom_location: s("custom_location"), custom_kept_at: s("custom_kept_at"), status: kind === "lost" ? "searching" : "waiting_owner"
+      };
+      const query = edit ? (supabase.from("items") as any).update(values).eq("id", edit).eq("owner_user_id", user.id).select("id").single() : (supabase.from("items") as any).insert(values).select("id").single();
+      const { data, error } = await query;
+      /*
       const { data, error } = await supabase
         .from("items")
         .insert({
@@ -73,11 +83,10 @@ function PostPage() {
         })
         .select("id")
         .single();
+      */
       if (error) throw error;
       await qc.invalidateQueries({ queryKey: ["items"] });
-      rememberReport(data.id, manageCode);
-      window.prompt(t("manageCodeSaved"), manageCode);
-      toast.success(t("posted"));
+      toast.success(edit ? t("updated") : t("posted"));
       nav({ to: "/items/$id", params: { id: data.id } });
     } catch (err) {
       console.error(err);
@@ -100,20 +109,24 @@ function PostPage() {
       <h1 className="text-3xl font-bold text-primary">{t(kind === "lost" ? "postLost" : "postFound")}</h1>
       <div className="star-divider my-4" />
       <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border bg-card p-6 shadow-sm">
-        <L t={t} k="title"><Input name="title" required minLength={2} maxLength={120} /></L>
-        <L t={t} k="description"><textarea name="description" maxLength={1000} rows={3} className="w-full rounded-md border bg-card p-3 text-sm" /></L>
+        <L t={t} k="title"><Input name="title" defaultValue={editItem?.title ?? ""} required minLength={2} maxLength={120} /></L>
+        <L t={t} k="description"><textarea name="description" defaultValue={editItem?.description ?? ""} maxLength={1000} rows={3} className="w-full rounded-md border bg-card p-3 text-sm" /></L>
         <div className="grid gap-4 sm:grid-cols-2">
           <L t={t} k="category">
-            <select name="category" required className={field} defaultValue="">
+            <select name="category" required className={field} defaultValue={editItem?.category ?? ""}>
               <option value="" disabled>{t("choose")}</option>
               {CATEGORIES.map((c) => <option key={c} value={c}>{t(c)}</option>)}
+              <option value="other">{t("other")}</option>
             </select>
+            <Input name="custom_category" maxLength={60} placeholder={t("otherAnswer")} />
           </L>
           <L t={t} k="location">
-            <select name="location" required className={field} defaultValue="">
+            <select name="location" required className={field} defaultValue={editItem?.location ?? ""}>
               <option value="" disabled>{t("choose")}</option>
               {LOCATIONS.map((c) => <option key={c} value={c}>{t(c)}</option>)}
+              <option value="other">{t("other")}</option>
             </select>
+            <Input name="custom_location" maxLength={60} placeholder={t("otherAnswer")} />
           </L>
           <L t={t} k="className">
             <select name="class_name" className={field} defaultValue="">
@@ -127,12 +140,14 @@ function PostPage() {
               <select name="kept_at" required className={field} defaultValue="">
                 <option value="" disabled>{t("choose")}</option>
                 {KEPT_AT.map((c) => <option key={c} value={c}>{t(c)}</option>)}
+                <option value="other">{t("other")}</option>
               </select>
+              <Input name="custom_kept_at" maxLength={60} placeholder={t("otherAnswer")} />
             </L>
           )}
           <L t={t} k="photo"><Input type="file" name="photo" accept="image/*" /></L>
-          <L t={t} k="contactName"><Input name="contact_name" required minLength={2} maxLength={80} /></L>
-          <L t={t} k="contactInfo"><Input name="contact_info" maxLength={120} /></L>
+          <L t={t} k="contactName"><Input name="contact_name" defaultValue={editItem?.contact_name ?? profile?.full_name ?? ""} required minLength={2} maxLength={80} /></L>
+          <L t={t} k="contactInfo"><Input name="contact_info" defaultValue={editItem?.contact_info ?? profile?.contact_info ?? ""} maxLength={120} /></L>
         </div>
         <Button type="submit" size="xl" className="w-full" disabled={busy}>{busy ? t("sending") : t("submit")}</Button>
       </form>
