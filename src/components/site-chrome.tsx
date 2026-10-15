@@ -36,6 +36,7 @@ export function SiteHeader() {
       <nav className="hidden items-center gap-6 text-sm xl:flex" aria-label={t("quickLinks")}>
         <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-accent" }}>{t("home")}</Link>
         <Link to="/items" activeProps={{ className: "text-accent" }}>{t("browse")}</Link>
+        <Link to="/my-reports" activeProps={{ className: "text-accent" }}>{t("myReports")}</Link>
         <Link to="/post" search={{ kind: "lost" }}>{t("iLost")}</Link>
         <Link to="/post" search={{ kind: "found" }}>{t("iFound")}</Link>
         <Link to="/" hash="contact">{t("contactUs")}</Link>
@@ -45,6 +46,7 @@ export function SiteHeader() {
     {open && <nav id="school-nav" className="border-t border-primary-foreground/15 px-4 pb-4 xl:hidden" aria-label={t("quickLinks")}>
       <Link onClick={close} to="/" className="flex min-h-12 items-center">{t("home")}</Link>
       <Link onClick={close} to="/items" className="flex min-h-12 items-center">{t("browse")}</Link>
+      <Link onClick={close} to="/my-reports" className="flex min-h-12 items-center">{t("myReports")}</Link>
       <Link onClick={close} to="/post" search={{ kind: "lost" }} className="flex min-h-12 items-center">{t("iLost")}</Link>
       <Link onClick={close} to="/post" search={{ kind: "found" }} className="flex min-h-12 items-center">{t("iFound")}</Link>
       <Link onClick={close} to="/" hash="contact" className="flex min-h-12 items-center">{t("contactUs")}</Link>
