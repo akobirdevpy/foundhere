@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-type Profile = { id: string; full_name: string; class_name: string | null; contact_info: string | null };
+type Profile = { id: string; full_name: string; class_name: string | null; contact_info: string | null; telegram_username?: string | null };
 type AuthContextValue = { user: any; profile: Profile | null; loading: boolean; signOut: () => Promise<void>; refreshProfile: () => Promise<void> };
 const AuthContext = createContext<AuthContextValue>({ user: null, profile: null, loading: true, signOut: async () => {}, refreshProfile: async () => {} });
 
