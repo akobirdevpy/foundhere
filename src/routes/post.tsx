@@ -8,9 +8,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/lib/i18n";
 import { CATEGORIES, CLASSES, KEPT_AT, LOCATIONS } from "@/lib/options";
 import { cn } from "@/lib/utils";
+import { generateManageCode, hashManageCode, rememberReport } from "@/lib/report-ownership";
 
 export const Route = createFileRoute("/post")({
-  validateSearch: (s: Record<string, unknown>) => ({ kind: s["kind"] === "found" ? "found" : "lost" }) as { kind: "lost" | "found" },
+  validateSearch: (s: Record<string, unknown>) => ({ kind: s["kind"] === "found" ? "found" : "lost", edit: typeof s["edit"] === "string" ? s["edit"] : undefined }) as { kind: "lost" | "found"; edit?: string },
   head: () => ({
     meta: [
       { name: "twitter:card", content: "summary_large_image" },
@@ -27,7 +28,7 @@ export const Route = createFileRoute("/post")({
 const field = "h-10 w-full rounded-md border bg-card px-3 text-sm";
 
 function PostPage() {
-  const { kind } = Route.useSearch();
+  const { kind, edit } = Route.useSearch();
   const { t } = useI18n();
   const nav = useNavigate();
   const qc = useQueryClient();
@@ -51,6 +52,8 @@ function PostPage() {
         if (error) throw error;
         photo_url = path;
       }
+      const manageCode = generateManageCode();
+      const owner_code_hash = await hashManageCode(manageCode);
       const { data, error } = await supabase
         .from("items")
         .insert({
@@ -65,11 +68,15 @@ function PostPage() {
           contact_info: s("contact_info"),
           item_date: s("item_date") ?? new Date().toISOString().slice(0, 10),
           photo_url,
+          owner_code_hash,
+          status: kind === "lost" ? "searching" : "waiting_owner",
         })
         .select("id")
         .single();
       if (error) throw error;
       await qc.invalidateQueries({ queryKey: ["items"] });
+      rememberReport(data.id, manageCode);
+      window.prompt(t("manageCodeSaved"), manageCode);
       toast.success(t("posted"));
       nav({ to: "/items/$id", params: { id: data.id } });
     } catch (err) {
