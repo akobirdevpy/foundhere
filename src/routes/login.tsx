@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
@@ -13,7 +13,7 @@ type AuthMethod = "phone" | "google";
 function LoginPage() {
   const { t } = useI18n();
   const nav = useNavigate();
-  const { user, refreshProfile } = useAuth();
+  const { user, profile, profileLoading, refreshProfile } = useAuth();
   const [method, setMethod] = useState<AuthMethod>("phone");
   const [phone, setPhone] = useState("+998");
   const [otp, setOtp] = useState("");
@@ -24,7 +24,10 @@ function LoginPage() {
   const [codeSent, setCodeSent] = useState(false);
   const [message, setMessage] = useState("");
 
-  if (user) return <ProfileStep onDone={async () => { await refreshProfile(); nav({ to: "/" }); }} />;
+  if (user && profileLoading) return <main className="mx-auto max-w-md px-4 py-16 text-center" aria-live="polite">{t("loading")}</main>;
+  if (user && !profile) return <ProfileStep onDone={async () => { await refreshProfile(); const redirect = new URLSearchParams(window.location.search).get("redirect"); window.location.assign(redirect?.startsWith("/") ? redirect : "/"); }} />;
+  useEffect(() => { if (user && profile) { const redirect = new URLSearchParams(window.location.search).get("redirect"); window.location.assign(redirect?.startsWith("/") ? redirect : "/"); } }, [user, profile]);
+  if (user) return <main className="mx-auto max-w-md px-4 py-16 text-center" aria-live="polite">{t("loading")}</main>;
 
   async function sendCode(event: React.FormEvent) {
     event.preventDefault();
@@ -48,9 +51,10 @@ function LoginPage() {
 
   async function google() {
     setBusy(true); setMessage("");
-    const { error } = await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: `${window.location.origin}/login` } });
-    if (error) setMessage(error.message);
-    setBusy(false);
+    const redirect = new URLSearchParams(window.location.search).get("redirect");
+    const redirectTo = `${window.location.origin}/login${redirect?.startsWith("/") ? `?redirect=${encodeURIComponent(redirect)}` : ""}`;
+    const { error } = await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo } });
+    if (error) { setMessage(t("googleAuthError")); setBusy(false); }
   }
 
   return <main className="mx-auto max-w-md px-4 py-12">
@@ -72,7 +76,7 @@ function LoginPage() {
 
 function ProfileStep({ onDone }: { onDone: () => void }) {
   const { t } = useI18n(); const { user } = useAuth();
-  const [name, setName] = useState(""); const [cls, setCls] = useState(""); const [telegram, setTelegram] = useState(""); const [busy, setBusy] = useState(false); const [message, setMessage] = useState("");
+  const [name, setName] = useState(user.user_metadata?.full_name ?? user.user_metadata?.name ?? ""); const [cls, setCls] = useState(""); const [telegram, setTelegram] = useState(""); const [busy, setBusy] = useState(false); const [message, setMessage] = useState("");
   async function save(e: React.FormEvent) { e.preventDefault(); setBusy(true); setMessage(""); const { error } = await (supabase.from("profiles") as any).upsert({ id: user.id, full_name: name.trim(), class_name: cls.trim() || null, telegram_username: telegram.replace(/^@/, "").trim() || null, contact_info: user.phone ?? null }); if (error) setMessage(error.message); else await onDone(); setBusy(false); }
   return <main className="mx-auto max-w-md px-4 py-12"><h1 className="text-3xl font-bold text-primary">{t("profileSetup")}</h1><form onSubmit={save} className="mt-6 space-y-4 rounded-2xl border bg-card p-6"><label className="block text-sm font-medium">{t("fullName")}<Input className="mt-2" value={name} onChange={e => setName(e.target.value)} required /></label><label className="block text-sm font-medium">{t("className")}<Input className="mt-2" value={cls} onChange={e => setCls(e.target.value)} /></label><label className="block text-sm font-medium">{t("telegramUsername")}<Input className="mt-2" value={telegram} onChange={e => setTelegram(e.target.value)} placeholder="@username" /></label><Button className="w-full" disabled={busy}>{busy ? t("loading") : t("save")}</Button>{message && <p role="alert" className="text-sm text-destructive">{message}</p>}</form></main>;
 }
