@@ -1,26 +1,32 @@
-# Foundhere
+# FoundHere
 
-Implement exactly the screenshot and nothing else
+Official lost-and-found service for Kogon City Specialized School. This is a Vite + React + TanStack Start app with Supabase Auth and database storage.
 
-This project was built with [Lovable](https://lovable.dev).
+## Setup
 
-**Live app**: https://foundhere.lovable.app
+1. Install dependencies with `npm install`.
+2. Copy `.env.example` to `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+3. Run `npm run dev`.
 
-## Build with Lovable
+Never commit `.env` files or service-role keys. The browser must use only the Supabase URL and anon/publishable key.
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/1a8c8367-aaa6-46b3-8e80-667272eaaaa8).
+## One-time Supabase cleanup and admin setup
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+Run `supabase/cleanup-and-admin.sql` once in the Supabase SQL Editor. It deletes all rows from reports, claims, matches, notifications, and all objects in the `item-photos` bucket. It keeps auth users and profiles. It also creates the backend `user_roles` table, marks `akobirsaidov023@gmail.com` as admin, and installs owner/admin RLS policies.
 
-## Development
+Review the existing table names and take a backup before running destructive SQL.
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## Google OAuth
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
+In Google Cloud, use the Supabase callback as the Authorized redirect URI:
+`https://YOUR_PROJECT_REF.supabase.co/auth/v1/callback`
+
+Add the production and preview app origins as Authorized JavaScript origins. In Supabase Authentication URL Configuration, set the published Site URL and allow the published URL plus each preview `/login` redirect URL.
+
+## Verification and deployment
+
+- `npm run lint`
+- `npm test -- --run`
+- `npm run build`
+
+Deploy the Vite app to Vercel. `vercel.json` rewrites SPA routes to `/` so direct links and refreshes resolve correctly.
