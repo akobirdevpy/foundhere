@@ -4,12 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
-import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "@tanstack/react-router";
 import { ItemCard, KindBadge } from "@/components/item-card";
 import { useI18n } from "@/lib/i18n";
 import { itemsQuery, usePhotoUrl } from "@/lib/items";
 import { scoreMatches } from "@/lib/matching";
+import { DeleteReportDialog } from "@/components/delete-report-dialog";
 
 export const Route = createFileRoute("/items/$id")({
   head: () => ({
@@ -72,19 +72,11 @@ function Detail() {
               >
                 {t("edit")}
               </Button>
-              <Button
-                variant="outline"
-                onClick={async () => {
-                  if (!window.confirm(t("deleteConfirm"))) return;
-                  const { error } = await (supabase.from("items") as any)
-                    .update({ owner_deleted_at: new Date().toISOString(), deleted_by_owner: true })
-                    .eq("id", item.id)
-                    .eq("owner_user_id", user.id);
-                  if (!error) nav({ to: "/my-reports" });
-                }}
-              >
-                {t("delete")}
-              </Button>
+              <DeleteReportDialog
+                itemId={item.id}
+                photoPath={item.photo_url}
+                onDeleted={() => nav({ to: "/my-reports" })}
+              />
             </div>
           )}
           {item.description && <p className="mt-3 text-muted-foreground">{item.description}</p>}

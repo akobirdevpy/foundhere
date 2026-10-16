@@ -175,6 +175,18 @@ const D = {
     ru: "Удалить это объявление? Это действие нельзя отменить.",
     en: "Delete this report? This cannot be undone.",
   },
+  deleteDescription: {
+    uz: "E'lon, rasmi, da'volari va bildirishnomalari o‘chiriladi.",
+    ru: "Объявление, фото, заявки и уведомления будут удалены.",
+    en: "The report, photo, claims, and notifications will be deleted.",
+  },
+  cancel: { uz: "Bekor qilish", ru: "Отмена", en: "Cancel" },
+  deleting: { uz: "O‘chirilmoqda…", ru: "Удаление…", en: "Deleting…" },
+  deleteError: {
+    uz: "E'lonni o‘chirib bo‘lmadi.",
+    ru: "Не удалось удалить объявление.",
+    en: "The report could not be deleted.",
+  },
   deleted: { uz: "E'lon o‘chirildi.", ru: "Объявление удалено.", en: "Report deleted." },
   noMyReports: {
     uz: "Bu qurilmada e'lonlaringiz yo‘q.",
@@ -319,7 +331,7 @@ const D = {
   notProvided: { uz: "Hali ko‘rsatilmagan", ru: "Пока не указан", en: "Not yet provided" },
   responsibleStaff: {
     uz: "Mas’ul xodim",
-    ru: "Ответственный сотрудник",
+    ru: "Отве��ственный сотрудник",
     en: "Responsible staff member",
   },
   unclaimedNote: {

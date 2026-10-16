@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -6,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { itemsQuery } from "@/lib/items";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
-import { supabase } from "@/integrations/supabase/client";
+import { DeleteReportDialog } from "@/components/delete-report-dialog";
 
 export const Route = createFileRoute("/admin")({ component: AdminPage });
 function AdminPage() {
@@ -15,7 +14,6 @@ function AdminPage() {
   const nav = useNavigate();
   const qc = useQueryClient();
   const { data = [], isLoading } = useQuery(itemsQuery());
-  const [busy, setBusy] = useState<string | null>(null);
   if (loading) return <main className="mx-auto max-w-6xl px-4 py-12">{t("loading")}</main>;
   if (!user || !isAdmin)
     return (
@@ -26,15 +24,6 @@ function AdminPage() {
         </Button>
       </main>
     );
-  async function remove(id: string) {
-    if (!window.confirm(t("deleteConfirm"))) return;
-    setBusy(id);
-    const { error } = await (supabase.from("items") as any).delete().eq("id", id);
-    setBusy(null);
-    if (!error) {
-      await qc.invalidateQueries({ queryKey: ["items"] });
-    }
-  }
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 md:px-6">
       <div className="mb-8 flex items-center justify-between gap-4">
@@ -63,13 +52,11 @@ function AdminPage() {
                     {t("edit")}
                   </Link>
                 </Button>
-                <Button
-                  variant="outline"
-                  disabled={busy === item.id}
-                  onClick={() => remove(item.id)}
-                >
-                  {t("delete")}
-                </Button>
+                <DeleteReportDialog
+                  itemId={item.id}
+                  photoPath={item.photo_url}
+                  onDeleted={() => qc.invalidateQueries({ queryKey: ["items"] })}
+                />
               </div>
             </article>
           ))}
