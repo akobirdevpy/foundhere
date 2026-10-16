@@ -19,7 +19,8 @@ const buttonVariants = cva(
         gold: "bg-accent text-accent-foreground shadow-md hover:brightness-105",
         goldOutline: "border border-accent bg-card text-primary shadow-sm hover:bg-accent/15",
         heroLight: "bg-card text-primary shadow-md hover:bg-card/90",
-        heroOutline: "border border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10",
+        heroOutline:
+          "border border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10",
       },
       size: {
         default: "h-9 px-4 py-2",

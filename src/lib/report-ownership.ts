@@ -33,7 +33,10 @@ export function rememberReport(id: string, code: string) {
 }
 
 export function forgetReport(id: string) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(getLocalReports().filter((report) => report.id !== id)));
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(getLocalReports().filter((report) => report.id !== id)),
+  );
 }
 
 export function isLocalReport(id: string) {
@@ -46,7 +49,10 @@ export function getManageCode(id: string) {
 
 function attempts() {
   try {
-    return JSON.parse(localStorage.getItem(ATTEMPTS_KEY) ?? "{}") as Record<string, { count: number; lockedUntil?: number }>;
+    return JSON.parse(localStorage.getItem(ATTEMPTS_KEY) ?? "{}") as Record<
+      string,
+      { count: number; lockedUntil?: number }
+    >;
   } catch {
     return {};
   }
@@ -54,7 +60,8 @@ function attempts() {
 
 export function getLockState(id: string) {
   const entry = attempts()[id];
-  if (!entry?.lockedUntil || entry.lockedUntil <= Date.now()) return { locked: false, remaining: 0 };
+  if (!entry?.lockedUntil || entry.lockedUntil <= Date.now())
+    return { locked: false, remaining: 0 };
   return { locked: true, remaining: Math.ceil((entry.lockedUntil - Date.now()) / 1000) };
 }
 

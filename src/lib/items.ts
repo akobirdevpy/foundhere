@@ -11,7 +11,9 @@ export const itemsQuery = () =>
     queryFn: async () => {
       const { data, error } = await supabase
         .from("items")
-        .select("*")
+        .select(
+          "id, kind, title, description, category, location, class_name, kept_at, item_date, photo_url, status, created_at, updated_at, owner_user_id, owner_deleted_at, deleted_by_owner, custom_category, custom_location, custom_kept_at",
+        )
         .order("created_at", { ascending: false })
         .limit(500);
       if (error) throw error;
@@ -29,24 +31,4 @@ export function usePhotoUrl(path: string | null) {
       .then(({ data }) => setUrl(data?.signedUrl ?? null));
   }, [path]);
   return url;
-}
-
-const words = (s: string) =>
-  s.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter((w) => w.length > 2);
-
-export function findMatches(item: Item, all: Item[]) {
-  const mine = new Set(words(`${item.title} ${item.description ?? ""}`));
-  return all
-    .filter((o) => o.kind !== item.kind)
-    .map((o) => {
-      let score = 0;
-      if (o.category === item.category) score += 3;
-      if (o.location === item.location) score += 1;
-      for (const w of words(`${o.title} ${o.description ?? ""}`)) if (mine.has(w)) score += 2;
-      return { o, score };
-    })
-    .filter((x) => x.score >= 3)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 6)
-    .map((x) => x.o);
 }

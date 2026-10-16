@@ -9,7 +9,14 @@ import { CATEGORIES, LOCATIONS } from "@/lib/options";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/items/")({
-  validateSearch: (s: SearchSchemaInput & { q?: string; kind?: string; cat?: string; loc?: string }) => ({ q: typeof s.q === "string" ? s.q : "", kind: typeof s.kind === "string" && ["lost", "found"].includes(s.kind) ? s.kind : "all", cat: typeof s.cat === "string" ? s.cat : "", loc: typeof s.loc === "string" ? s.loc : "" }),
+  validateSearch: (
+    s: SearchSchemaInput & { q?: string; kind?: string; cat?: string; loc?: string },
+  ) => ({
+    q: typeof s.q === "string" ? s.q : "",
+    kind: typeof s.kind === "string" && ["lost", "found"].includes(s.kind) ? s.kind : "all",
+    cat: typeof s.cat === "string" ? s.cat : "",
+    loc: typeof s.loc === "string" ? s.loc : "",
+  }),
   head: () => ({
     meta: [
       { name: "twitter:card", content: "summary_large_image" },
@@ -30,7 +37,8 @@ function Browse() {
   const { data = [], isLoading, isError } = useQuery(itemsQuery());
   const { kind, cat, loc, q } = Route.useSearch();
   const navigate = Route.useNavigate();
-  const update = (values: Partial<{ kind: string; cat: string; loc: string; q: string }>) => navigate({ search: prev => ({ ...prev, ...values }), replace: true });
+  const update = (values: Partial<{ kind: string; cat: string; loc: string; q: string }>) =>
+    navigate({ search: (prev) => ({ ...prev, ...values }), replace: true });
   const list = useMemo(
     () =>
       data.filter(
@@ -38,7 +46,10 @@ function Browse() {
           (kind === "all" || i.kind === kind) &&
           (!cat || i.category === cat) &&
           (!loc || i.location === loc) &&
-          (!q || `${i.title} ${i.description ?? ""} ${i.category} ${t(i.category)}`.toLowerCase().includes(q.toLowerCase())),
+          (!q ||
+            `${i.title} ${i.description ?? ""} ${i.category} ${t(i.category)}`
+              .toLowerCase()
+              .includes(q.toLowerCase())),
       ),
     [data, kind, cat, loc, q, t],
   );
@@ -49,26 +60,54 @@ function Browse() {
       <div className="mb-6 flex flex-wrap gap-3">
         <div className="flex rounded-lg border bg-card p-1">
           {["all", "lost", "found"].map((k) => (
-            <button key={k} onClick={() => update({ kind: k })} className={cn("rounded-md px-3 py-1 text-sm", kind === k && "bg-primary text-primary-foreground")}>
+            <button
+              key={k}
+              onClick={() => update({ kind: k })}
+              className={cn(
+                "rounded-md px-3 py-1 text-sm",
+                kind === k && "bg-primary text-primary-foreground",
+              )}
+            >
               {t(k)}
             </button>
           ))}
         </div>
-        <Input value={q} onChange={(e) => update({ q: e.target.value })} placeholder={t("search")} className="w-full bg-card sm:w-56" />
+        <Input
+          value={q}
+          onChange={(e) => update({ q: e.target.value })}
+          placeholder={t("search")}
+          className="w-full bg-card sm:w-56"
+        />
         <select className={sel} value={cat} onChange={(e) => update({ cat: e.target.value })}>
-          <option value="">{t("category")}: {t("all")}</option>
-          {CATEGORIES.map((c) => <option key={c} value={c}>{t(c)}</option>)}
+          <option value="">
+            {t("category")}: {t("all")}
+          </option>
+          {CATEGORIES.map((c) => (
+            <option key={c} value={c}>
+              {t(c)}
+            </option>
+          ))}
         </select>
         <select className={sel} value={loc} onChange={(e) => update({ loc: e.target.value })}>
-          <option value="">{t("location")}: {t("all")}</option>
-          {LOCATIONS.map((c) => <option key={c} value={c}>{t(c)}</option>)}
+          <option value="">
+            {t("location")}: {t("all")}
+          </option>
+          {LOCATIONS.map((c) => (
+            <option key={c} value={c}>
+              {t(c)}
+            </option>
+          ))}
         </select>
       </div>
       {isLoading && <p className="text-muted-foreground">{t("loading")}</p>}
       {isError && <p className="text-destructive">{t("loadError")}</p>}
-      {!isLoading && !isError && list.length === 0 && <p className="text-muted-foreground">{t("empty")}</p>}
+      {!isLoading && !isError && list.length === 0 && (
+        <p className="text-muted-foreground">{t("empty")}</p>
+      )}
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {list.map((i) => <ItemCard key={i.id} item={i} />)}
+        {list.map((i) => (
+          <ItemCard key={i.id} item={i} />
+        ))}
       </div>
     </div>
   );
