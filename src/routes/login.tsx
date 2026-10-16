@@ -188,7 +188,7 @@ function ProfileStep({ onDone }: { onDone: () => void }) {
     e.preventDefault();
     setBusy(true);
     setMessage("");
-    const { error } = await (supabase.from("profiles") as any).upsert({
+    const { error } = await ((supabase as any).from("profiles") as any).upsert({
       id: user.id,
       full_name: name.trim(),
       class_name: cls.trim() || null,

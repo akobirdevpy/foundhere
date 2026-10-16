@@ -4,10 +4,15 @@ import type { Item } from "@/lib/items";
 export type MatchLevel = "high" | "possible";
 export type ScoredMatch = { item: Item; score: number; level: MatchLevel };
 
+const normalize = (value: string) =>
+  value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("und");
+
 const words = (value: string | null | undefined) =>
   new Set(
-    (value ?? "")
-      .toLowerCase()
+    normalize(value ?? "")
       .split(/[^\p{L}\p{N}]+/u)
       .filter((word) => word.length > 2),
   );

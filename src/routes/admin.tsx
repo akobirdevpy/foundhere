@@ -59,7 +59,7 @@ function AdminPage() {
               <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
               <div className="mt-4 flex gap-2">
                 <Button asChild>
-                  <Link to="/post" search={{ kind: item.kind, edit: item.id }}>
+                  <Link to="/post" search={{ kind: item.kind as "lost" | "found", edit: item.id }}>
                     {t("edit")}
                   </Link>
                 </Button>

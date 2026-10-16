@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 type Profile = {
@@ -22,7 +22,9 @@ type AuthContextValue = {
 const AuthContext = createContext<AuthContextValue>({
   user: null,
   profile: null,
+  profileLoading: false,
   loading: true,
+  isAdmin: false,
   signOut: async () => {},
   refreshProfile: async () => {},
 });
@@ -33,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [profileLoading, setProfileLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const refreshProfile = async () => {
+  const refreshProfile = useCallback(async () => {
     if (!user) {
       setProfile(null);
       setIsAdmin(false);
@@ -41,13 +43,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     setProfileLoading(true);
     const [{ data: profileData }, { data: roleData }] = await Promise.all([
-      (supabase.from("profiles") as any).select("*").eq("id", user.id).maybeSingle(),
-      (supabase.from("user_roles") as any).select("role").eq("user_id", user.id).maybeSingle(),
+      ((supabase as any).from("profiles") as any).select("*").eq("id", user.id).maybeSingle(),
+      ((supabase as any).from("user_roles") as any)
+        .select("role")
+        .eq("user_id", user.id)
+        .maybeSingle(),
     ]);
     setProfile(profileData ?? null);
     setIsAdmin(roleData?.role === "admin");
     setProfileLoading(false);
-  };
+  }, [user]);
   useEffect(() => {
     let active = true;
     supabase.auth.getSession().then(({ data }) => {
@@ -67,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
   useEffect(() => {
     void refreshProfile();
-  }, [user?.id]);
+  }, [refreshProfile, user?.id]);
   return (
     <AuthContext.Provider
       value={{

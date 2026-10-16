@@ -69,7 +69,7 @@ export function recordFailedAttempt(id: string) {
   const all = attempts();
   const current = all[id] ?? { count: 0 };
   const count = current.count + 1;
-  all[id] = { count, lockedUntil: count >= 5 ? Date.now() + LOCK_MS : undefined };
+  all[id] = count >= 5 ? { count, lockedUntil: Date.now() + LOCK_MS } : { count };
   localStorage.setItem(ATTEMPTS_KEY, JSON.stringify(all));
 }
 

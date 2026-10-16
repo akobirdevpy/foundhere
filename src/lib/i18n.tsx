@@ -165,7 +165,6 @@ const D = {
     ru: "6-значный код управления",
     en: "6-digit manage code",
   },
-  verify: { uz: "Tekshirish", ru: "Проверить", en: "Verify" },
   wrongCode: {
     uz: "Kod noto‘g‘ri yoki muddati tugagan.",
     ru: "Неверный код или срок действия истёк.",

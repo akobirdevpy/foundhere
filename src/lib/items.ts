@@ -3,7 +3,11 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 
-export type Item = Tables<"items">;
+export type Item = Omit<Tables<"items">, "kind" | "contact_name" | "contact_info"> & {
+  kind: "lost" | "found";
+  contact_name?: string | null;
+  contact_info?: string | null;
+};
 
 export const itemsQuery = () =>
   queryOptions({
@@ -17,7 +21,7 @@ export const itemsQuery = () =>
         .order("created_at", { ascending: false })
         .limit(500);
       if (error) throw error;
-      return data;
+      return data as Item[];
     },
   });
 

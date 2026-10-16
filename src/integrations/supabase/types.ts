@@ -23,6 +23,14 @@ export type Database = {
           location: string;
           photo_url: string | null;
           title: string;
+          status: string;
+          updated_at: string;
+          owner_user_id: string | null;
+          owner_deleted_at: string | null;
+          deleted_by_owner: boolean | null;
+          custom_category: string | null;
+          custom_location: string | null;
+          custom_kept_at: string | null;
         };
         Insert: {
           category: string;
@@ -38,6 +46,14 @@ export type Database = {
           location: string;
           photo_url?: string | null;
           title: string;
+          status?: string;
+          updated_at?: string;
+          owner_user_id?: string | null;
+          owner_deleted_at?: string | null;
+          deleted_by_owner?: boolean | null;
+          custom_category?: string | null;
+          custom_location?: string | null;
+          custom_kept_at?: string | null;
         };
         Update: {
           category?: string;
@@ -53,6 +69,14 @@ export type Database = {
           location?: string;
           photo_url?: string | null;
           title?: string;
+          status?: string;
+          updated_at?: string;
+          owner_user_id?: string | null;
+          owner_deleted_at?: string | null;
+          deleted_by_owner?: boolean | null;
+          custom_category?: string | null;
+          custom_location?: string | null;
+          custom_kept_at?: string | null;
         };
         Relationships: [];
       };

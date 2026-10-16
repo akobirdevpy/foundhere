@@ -43,7 +43,6 @@ function Detail() {
     ["className", item.class_name],
     ["keptAt", item.kept_at ? t(item.kept_at) : null],
     ["date", item.item_date],
-    ["contact", [item.contact_name, item.contact_info].filter(Boolean).join(" · ")],
   ];
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
@@ -64,7 +63,12 @@ function Detail() {
           {(item as any).owner_user_id === user?.id && (
             <div className="mt-4 flex gap-2">
               <Button
-                onClick={() => nav({ to: "/post", search: { kind: item.kind, edit: item.id } })}
+                onClick={() =>
+                  nav({
+                    to: "/post",
+                    search: { kind: item.kind as "lost" | "found", edit: item.id },
+                  })
+                }
               >
                 {t("edit")}
               </Button>
