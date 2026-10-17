@@ -17,7 +17,7 @@ export function ItemCard({ item }: { item: Item }) {
   const { t } = useI18n();
   const url = usePhotoUrl(item.photo_url);
   return (
-    <Link to="/items/$id" params={{ id: item.id }} className="group overflow-hidden rounded-lg border bg-card shadow-sm transition hover:shadow-md">
+    <Link to="/items/$id" params={{ id: item.id }} className="group overflow-hidden rounded-lg border bg-card transition-colors duration-150 hover:border-primary/30">
       <div className="flex aspect-[4/3] items-center justify-center bg-secondary">
         {url ? <img src={url} alt={item.title} className="h-full w-full object-cover" /> : <ImageOff className="h-8 w-8 text-muted-foreground" />}
       </div>
@@ -26,7 +26,7 @@ export function ItemCard({ item }: { item: Item }) {
           <KindBadge kind={item.kind} />
           <span className="text-xs text-muted-foreground">{item.item_date}</span>
         </div>
-        <h3 className="font-serif text-base font-semibold group-hover:text-primary">{item.title}</h3>
+        <h3 className="font-sans text-base font-medium group-hover:text-primary">{item.title}</h3>
         <div className="flex items-center gap-1 text-xs text-muted-foreground">
           <MapPin className="h-3 w-3" /> {t(item.location)} · {t(item.category)}
         </div>
