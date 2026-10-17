@@ -23,14 +23,18 @@ import logoAsset from "@/assets/logo.jpg";
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <img
-      src={logoAsset}
-      alt="Kogon shahar ixtisoslashtirilgan maktabi logo"
-      width={64}
-      height={64}
-      decoding="async"
-      className={cn("rounded-sm object-contain", className)}
-    />
+    <span
+      className={cn("relative block shrink-0 overflow-hidden rounded-sm bg-[#303f86]", className)}
+    >
+      <img
+        src={logoAsset}
+        alt="Kogon shahar ixtisoslashtirilgan maktabi logo"
+        width={64}
+        height={64}
+        decoding="async"
+        className="absolute inset-0 h-full w-full scale-[1.7] object-cover object-[center_18%]"
+      />
+    </span>
   );
 }
 
@@ -77,11 +81,14 @@ export function SiteHeader() {
       <div className="mx-auto flex min-h-14 max-w-6xl items-center justify-between gap-3 px-4 py-2.5 md:min-h-20 md:gap-4 md:px-6 md:py-3">
         <Link to="/" onClick={close} className="flex min-w-0 items-center gap-2 md:gap-2.5">
           <Logo className="size-8 shrink-0 md:size-11" />
-          <span className="max-w-[180px] truncate text-[11px] font-semibold leading-tight tracking-tight sm:max-w-[250px] sm:text-xs md:max-w-[330px] md:text-base">
+          <span className="max-w-[180px] truncate text-[10px] font-semibold leading-tight tracking-tight sm:max-w-[250px] sm:text-xs md:max-w-[330px] md:text-sm">
             {t("school")}
           </span>
         </Link>
-        <nav className="hidden items-center gap-6 text-sm xl:flex" aria-label={t("quickLinks")}>
+        <nav
+          className="hidden items-center gap-5 text-[13px] font-medium lg:flex"
+          aria-label={t("quickLinks")}
+        >
           <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-accent" }}>
             {t("home")}
           </Link>
@@ -115,7 +122,7 @@ export function SiteHeader() {
         </nav>
         <Button
           variant="ghost"
-          className="flex size-9 shrink-0 items-center justify-center rounded-md border border-primary-foreground/20 bg-primary-foreground/5 hover:bg-primary-foreground/10 hover:text-primary-foreground md:size-10 xl:hidden"
+          className="flex size-9 shrink-0 items-center justify-center rounded-md border border-primary-foreground/20 bg-primary-foreground/5 hover:bg-primary-foreground/10 hover:text-primary-foreground md:size-10 lg:hidden"
           aria-label={t(open ? "closeMenu" : "menu")}
           aria-expanded={open}
           aria-controls="school-nav"
@@ -127,7 +134,7 @@ export function SiteHeader() {
       {open && (
         <nav
           id="school-nav"
-          className="border-t border-primary-foreground/15 px-4 pb-3 xl:hidden"
+          className="border-t border-primary-foreground/15 px-4 pb-3 lg:hidden"
           aria-label={t("quickLinks")}
         >
           <Link
@@ -206,7 +213,7 @@ export function SiteHeader() {
         </nav>
       )}
       <nav
-        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t bg-card/95 px-1 pb-[env(safe-area-inset-bottom)] shadow-lg backdrop-blur xl:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t bg-card/95 px-1 pb-[env(safe-area-inset-bottom)] shadow-lg backdrop-blur lg:hidden"
         aria-label={t("quickLinks")}
       >
         {[
@@ -220,7 +227,7 @@ export function SiteHeader() {
             key={label}
             to={to as any}
             search={search as any}
-            className="flex min-h-13 flex-col items-center justify-center gap-0.5 px-0.5 text-[9px] font-medium text-muted-foreground sm:text-[10px]"
+            className="flex min-h-12 flex-col items-center justify-center gap-0.5 px-0.5 text-[9px] font-medium text-muted-foreground sm:text-[10px]"
           >
             <Icon className="h-5 w-5" />
             <span>{t(label)}</span>
