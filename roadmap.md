@@ -4,5 +4,5 @@
 - [x] Review metadata/favicon and verify desktop/mobile navigation, languages and data states.
 - [ ] Fill official phone, email, full address, hours, office room and staff name — awaiting school details.
 # Minimal light UI
-- [ ] Simplify header, homepage controls and visual tokens without changing flows.
-- [ ] Verify navigation, languages and search at mobile and desktop widths.
+- [x] Simplify header, homepage controls and visual tokens without changing flows.
+- [x] Verify navigation, languages and search at mobile and desktop widths.
