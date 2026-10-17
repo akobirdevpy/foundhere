@@ -40,19 +40,19 @@
 :root {
   --radius: 0.5rem;
   --background: oklch(1 0 0);
-  --foreground: oklch(0.286 0.049 266);
+  --foreground: oklch(0.21 0.03 266);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.25 0.025 260);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.25 0.025 260);
-  --primary: oklch(0.286 0.049 266);
+  --primary: oklch(0.21 0.03 266);
   --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.953 0.005 260);
+  --secondary: oklch(0.97 0.012 230);
   --secondary-foreground: oklch(0.32 0.065 265);
   --muted: oklch(0.95 0.004 260);
   --muted-foreground: oklch(0.49 0.018 260);
-  --accent: oklch(0.81 0.13 82);
-  --accent-foreground: oklch(0.25 0.05 70);
+  --accent: oklch(0.5 0.15 270);
+  --accent-foreground: oklch(0.99 0 0);
   --destructive: oklch(0.6 0.2 25);
   --destructive-foreground: oklch(0.99 0 0);
   --success: oklch(0.62 0.14 155);
@@ -71,7 +71,7 @@
   --card-foreground: oklch(0.96 0.01 275);
   --popover: oklch(0.27 0.07 275);
   --popover-foreground: oklch(0.96 0.01 275);
-  --primary: oklch(0.286 0.049 266);
+  --primary: oklch(0.21 0.03 266);
   --primary-foreground: oklch(0.99 0 0);
   --secondary: oklch(0.3 0.06 275);
   --secondary-foreground: oklch(0.96 0.01 275);
@@ -90,9 +90,9 @@
     font-size: 15px;
     letter-spacing: 0;
   }
-  h1, h2, h3 { font-family: var(--font-serif); }
+  h1, h2, h3 { font-family: var(--font-sans); text-wrap: balance; }
   a, button, input, select { transition-duration: 150ms; }
-  a:hover { color: var(--muted-foreground); }
+  a:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; }
 }
 
 @utility star-pattern {
@@ -108,4 +108,15 @@
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+@utility school-cover {
+  background-color: var(--secondary);
+  background-image: var(--school-cover-image);
+  background-position: right center;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+  @media (max-width: 767px) {
+    background-image: none;
+  }
 }

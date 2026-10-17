@@ -6,3 +6,7 @@
 # Minimal light UI
 - [x] Simplify header, homepage controls and visual tokens without changing flows.
 - [x] Verify navigation, languages and search at mobile and desktop widths.
+
+# 42.uz visual adaptation
+- [x] Adapt shared styling and all content pages to the reference without changing behavior.
+- [x] Verify all pages, languages, mobile layouts and existing controls.

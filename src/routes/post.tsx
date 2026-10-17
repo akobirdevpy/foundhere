@@ -24,7 +24,7 @@ export const Route = createFileRoute("/post")({
   component: PostPage,
 });
 
-const field = "h-10 w-full rounded-md border bg-card px-3 text-sm";
+const field = "h-11 w-full rounded-lg border bg-card px-3 text-sm";
 
 function PostPage() {
   const { kind } = Route.useSearch();
@@ -81,20 +81,20 @@ function PostPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-10">
-      <div className="mb-6 flex rounded-xl border bg-card p-1">
+    <div className="mx-auto max-w-2xl px-4 py-10 md:px-6 md:py-14">
+      <div className="mb-6 flex rounded-xl bg-secondary p-1">
         {(["lost", "found"] as const).map((k) => (
-          <button key={k} type="button" onClick={() => nav({ to: "/post", search: { kind: k } })}
-            className={cn("flex-1 rounded-lg py-2 text-sm font-semibold", kind === k && (k === "lost" ? "bg-lost text-lost-foreground" : "bg-success text-success-foreground"))}>
+          <Button variant="ghost" key={k} type="button" onClick={() => nav({ to: "/post", search: { kind: k } })}
+            className={cn("h-11 flex-1 rounded-lg text-sm font-medium", kind === k && (k === "lost" ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground" : "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"))}>
             {t(k === "lost" ? "iLost" : "iFound")}
-          </button>
+          </Button>
         ))}
       </div>
-      <h1 className="text-3xl font-bold text-primary">{t(kind === "lost" ? "postLost" : "postFound")}</h1>
-      <div className="star-divider my-4" />
-      <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border bg-card p-6 shadow-sm">
+      <h1 className="text-3xl font-semibold text-primary">{t(kind === "lost" ? "postLost" : "postFound")}</h1>
+      <div className="my-6 border-b" />
+      <form onSubmit={onSubmit} className="space-y-5">
         <L t={t} k="title"><Input name="title" required minLength={2} maxLength={120} /></L>
-        <L t={t} k="description"><textarea name="description" maxLength={1000} rows={3} className="w-full rounded-md border bg-card p-3 text-sm" /></L>
+        <L t={t} k="description"><textarea name="description" maxLength={1000} rows={3} className="w-full rounded-lg border bg-card p-3 text-sm" /></L>
         <div className="grid gap-4 sm:grid-cols-2">
           <L t={t} k="category">
             <select name="category" required className={field} defaultValue="">

@@ -11,3 +11,5 @@
 
 - Keep shared school identity and navigation in site-chrome, with homepage content in the index route, so all existing flows retain a consistent institutional shell.
 - Store browse filters in validated route search parameters so homepage searches and shared URLs open the same results.
+
+- Keep decorative homepage imagery bundled locally and separate from item data, so visual updates never introduce sample announcements.

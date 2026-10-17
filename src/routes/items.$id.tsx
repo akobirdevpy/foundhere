@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ImageOff } from "lucide-react";
 import { ItemCard, KindBadge } from "@/components/item-card";
 import { useI18n } from "@/lib/i18n";
 import { findMatches, itemsQuery, usePhotoUrl } from "@/lib/items";
@@ -38,28 +38,28 @@ function Detail() {
     ["contact", [item.contact_name, item.contact_info].filter(Boolean).join(" · ")],
   ];
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10">
+    <div className="mx-auto max-w-[1100px] px-4 py-10 md:px-6 md:py-14">
       <Link to="/items" className="mb-6 inline-flex items-center gap-1 text-sm text-primary"><ArrowLeft className="h-4 w-4" /> {t("back")}</Link>
       <div className="grid gap-8 md:grid-cols-2">
-        <div className="overflow-hidden rounded-2xl bg-secondary">
-          {url ? <img src={url} alt={item.title} className="w-full object-cover" /> : <div className="aspect-[4/3] star-pattern bg-primary" />}
+        <div className="overflow-hidden rounded-lg bg-secondary">
+          {url ? <img src={url} alt={item.title} className="w-full object-cover" /> : <div className="flex aspect-[4/3] items-center justify-center"><ImageOff className="h-12 w-12 text-muted-foreground" /></div>}
         </div>
         <div>
           <KindBadge kind={item.kind} />
-          <h1 className="mt-3 text-3xl font-bold text-primary md:text-4xl">{item.title}</h1>
+          <h1 className="mt-3 text-3xl font-semibold text-primary md:text-4xl">{item.title}</h1>
           {item.description && <p className="mt-3 text-muted-foreground">{item.description}</p>}
-          <dl className="mt-6 divide-y rounded-xl border bg-card">
+          <dl className="mt-6 divide-y border-y">
             {rows.filter(([, v]) => v).map(([k, v]) => (
-              <div key={k} className="flex justify-between gap-4 px-4 py-3 text-sm">
+              <div key={k} className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-4 py-3 text-sm">
                 <dt className="text-muted-foreground">{t(k)}</dt>
-                <dd className="text-right font-medium">{v}</dd>
+                <dd className="break-words text-right font-medium">{v}</dd>
               </div>
             ))}
           </dl>
         </div>
       </div>
-      <div className="star-divider my-10" />
-      <h2 className="mb-5 text-2xl font-semibold text-primary">✨ {t("matches")}</h2>
+      <div className="my-10 border-b" />
+      <h2 className="mb-5 text-2xl font-semibold text-primary">{t("matches")}</h2>
       {matches.length === 0 ? (
         <p className="text-muted-foreground">{t("noMatches")}</p>
       ) : (

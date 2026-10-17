@@ -24,7 +24,7 @@ function Account() {
 function Languages({ footer = false }: { footer?: boolean }) {
   const { lang, setLang } = useI18n();
   return <select aria-label="Language" value={lang} onChange={e => setLang(e.target.value as Lang)} className={cn("h-11 w-14 shrink-0 cursor-pointer rounded-sm border-0 bg-transparent px-1 text-xs font-medium outline-none transition-colors duration-150 focus-visible:ring-1 focus-visible:ring-ring", footer ? "text-primary-foreground" : "text-foreground")}>
-    {(["uz", "ru", "en"] as Lang[]).map(l => <option key={l} value={l} className="bg-background text-foreground">{l.toUpperCase()}</option>)}
+    {(["uz", "ru", "en"] as Lang[]).map(l => <option key={l} value={l} className="bg-background/95 text-foreground backdrop-blur-sm">{l.toUpperCase()}</option>)}
   </select>;
 }
 
@@ -39,8 +39,8 @@ export function SiteHeader() {
         <span className="truncate text-[13px] font-medium md:text-sm">{t("schoolShort")}</span>
       </Link>
       <nav className="hidden shrink-0 items-center gap-5 text-sm xl:flex" aria-label={t("quickLinks")}>
-        <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-primary underline underline-offset-8" }}>{t("home")}</Link>
-        <Link to="/items" activeProps={{ className: "text-primary underline underline-offset-8" }}>{t("browse")}</Link>
+        <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-accent underline underline-offset-8" }}>{t("home")}</Link>
+        <Link to="/items" activeProps={{ className: "text-accent underline underline-offset-8" }}>{t("browse")}</Link>
         <Link to="/post" search={{ kind: "lost" }}>{t("iLost")}</Link>
         <Link to="/post" search={{ kind: "found" }}>{t("iFound")}</Link>
         <Link to="/" hash="contact">{t("contactUs")}</Link>
@@ -66,14 +66,14 @@ export function SiteFooter() {
   const { t } = useI18n();
   return <footer className="bg-primary text-primary-foreground">
     <div className="mx-auto grid max-w-[1100px] gap-10 px-4 py-12 md:grid-cols-[1.4fr_1fr_1fr] md:px-6">
-      <div><div className="flex items-center gap-4"><Logo className="h-16 w-auto" /><span className="max-w-64 font-serif text-xl leading-snug">{t("school")}</span></div><p className="mt-6 max-w-sm text-sm leading-relaxed text-primary-foreground/70">{t("serviceSubtitle")}</p></div>
-      <div><h2 className="mb-4 font-sans text-sm font-semibold text-accent">{t("quickLinks")}</h2><nav className="grid gap-1 text-sm">
+      <div><div className="flex items-center gap-4"><Logo className="h-12 w-auto" /><span className="max-w-64 font-sans text-base font-semibold leading-snug">{t("school")}</span></div><p className="mt-6 max-w-sm text-sm leading-relaxed text-primary-foreground/70">{t("serviceSubtitle")}</p></div>
+      <div><h2 className="mb-4 font-sans text-sm font-semibold text-primary-foreground">{t("quickLinks")}</h2><nav className="grid gap-1 text-sm">
         <Link className="flex min-h-10 items-center justify-between" to="/">{t("home")}<ArrowUpRight className="h-3 w-3" /></Link>
         <Link className="flex min-h-10 items-center justify-between" to="/items">{t("browse")}<ArrowUpRight className="h-3 w-3" /></Link>
         <Link className="flex min-h-10 items-center justify-between" to="/post" search={{ kind: "lost" }}>{t("postLost")}<ArrowUpRight className="h-3 w-3" /></Link>
         <Link className="flex min-h-10 items-center justify-between" to="/post" search={{ kind: "found" }}>{t("postFound")}<ArrowUpRight className="h-3 w-3" /></Link>
       </nav></div>
-      <div><h2 className="mb-5 font-sans text-sm font-semibold text-accent">{t("contactUs")}</h2><dl className="space-y-4 text-xs leading-relaxed text-primary-foreground/75">
+      <div><h2 className="mb-5 font-sans text-sm font-semibold text-primary-foreground">{t("contactUs")}</h2><dl className="space-y-4 text-xs leading-relaxed text-primary-foreground/75">
         {[{icon:MapPin,label:"address",value:"city"},{icon:Phone,label:"phone",value:"notProvided"},{icon:Mail,label:"email",value:"notProvided"},{icon:Clock,label:"workingHours",value:"confirmHours"}].map(({icon:Icon,label,value}) => <div key={label} className="flex gap-3"><Icon className="mt-0.5 h-4 w-4 shrink-0" /><div><dt className="font-medium text-primary-foreground">{t(label)}</dt><dd>{t(value)}</dd></div></div>)}
       </dl></div>
     </div>
