@@ -38,8 +38,8 @@ function AuthPage() {
 
   return (
     <div className="mx-auto max-w-md px-4 py-16">
-      <div className="rounded-lg border bg-card p-8 shadow-sm">
-        <h1 className="font-serif text-2xl font-bold text-primary">{t("signInTitle")}</h1>
+      <div className="border-t bg-background pt-8">
+        <h1 className="font-sans text-3xl font-semibold text-primary">{t("signInTitle")}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{t("signInDesc")}</p>
         <Button onClick={google} disabled={busy} className="mt-6 h-12 w-full">{busy ? t("loading") : t("signInGoogle")}</Button>
         {err && <p role="alert" className="mt-4 text-sm text-destructive">{t("signInError")}</p>}

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useI18n } from "@/lib/i18n";
 import { itemsQuery } from "@/lib/items";
 import { CATEGORIES, LOCATIONS } from "@/lib/options";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/items/")({
@@ -23,7 +24,7 @@ export const Route = createFileRoute("/items/")({
   component: Browse,
 });
 
-const sel = "h-9 w-full sm:w-auto rounded-md border bg-card px-3 text-sm";
+const sel = "h-11 w-full sm:w-auto rounded-lg border bg-card px-3 text-sm";
 
 function Browse() {
   const { t } = useI18n();
@@ -43,18 +44,18 @@ function Browse() {
     [data, kind, cat, loc, q, t],
   );
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10">
-      <h1 className="text-4xl font-bold text-primary">{t("browse")}</h1>
-      <div className="star-divider my-4" />
-      <div className="mb-6 flex flex-wrap gap-3">
-        <div className="flex rounded-lg border bg-card p-1">
+    <div className="mx-auto max-w-[1100px] px-4 py-10 md:px-6 md:py-14">
+      <h1 className="text-3xl font-semibold md:text-4xl text-primary">{t("browse")}</h1>
+      <div className="my-6 border-b" />
+      <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[auto_1fr_1fr_1fr]">
+        <div className="flex rounded-xl bg-secondary p-1">
           {["all", "lost", "found"].map((k) => (
-            <button key={k} onClick={() => update({ kind: k })} className={cn("rounded-md px-3 py-1 text-sm", kind === k && "bg-primary text-primary-foreground")}>
+            <Button variant="ghost" key={k} onClick={() => update({ kind: k })} className={cn("h-9 flex-1 rounded-lg px-3 text-sm", kind === k && "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground")}>
               {t(k)}
-            </button>
+            </Button>
           ))}
         </div>
-        <Input value={q} onChange={(e) => update({ q: e.target.value })} placeholder={t("search")} className="w-full bg-card sm:w-56" />
+        <Input value={q} onChange={(e) => update({ q: e.target.value })} placeholder={t("search")} className="w-full bg-card" />
         <select className={sel} value={cat} onChange={(e) => update({ cat: e.target.value })}>
           <option value="">{t("category")}: {t("all")}</option>
           {CATEGORIES.map((c) => <option key={c} value={c}>{t(c)}</option>)}
