@@ -33,7 +33,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
   return <header className="sticky top-0 z-30 border-b bg-background text-foreground">
-    <div className="mx-auto grid h-14 max-w-[1100px] grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-4 md:h-16 md:px-6 xl:flex xl:justify-between">
+    <div className="mx-auto grid h-[55px] max-w-[1100px] grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-4 md:h-[63px] md:px-6 xl:flex xl:justify-between">
       <Link to="/" onClick={close} className="flex min-w-0 items-center gap-2 xl:max-w-64" title={t("school")}>
         <Logo className="h-8 w-auto shrink-0" />
         <span className="truncate text-[13px] font-medium md:text-sm">{t("schoolShort")}</span>
