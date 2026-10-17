@@ -8,5 +8,5 @@
 - [x] Verify navigation, languages and search at mobile and desktop widths.
 
 # 42.uz visual adaptation
-- [ ] Adapt shared styling and all content pages to the reference without changing behavior.
-- [ ] Verify all pages, languages, mobile layouts and existing controls.
+- [x] Adapt shared styling and all content pages to the reference without changing behavior.
+- [x] Verify all pages, languages, mobile layouts and existing controls.

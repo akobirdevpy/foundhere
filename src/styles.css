@@ -113,8 +113,9 @@
 @utility school-cover {
   background-color: var(--secondary);
   background-image: var(--school-cover-image);
-  background-position: center;
-  background-size: cover;
+  background-position: right center;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
   @media (max-width: 767px) {
     background-image: none;
   }
