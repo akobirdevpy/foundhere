@@ -15,18 +15,20 @@ import {
   UserCircle,
 } from "lucide-react";
 import { useState } from "react";
-const logo = "/logo.jpg";
 import { useI18n, type Lang } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import logoAsset from "@/assets/logo.jpg";
 
 export function Logo({ className }: { className?: string }) {
-  const { t } = useI18n();
   return (
     <img
-      src={logo}
+      src={logoAsset}
       alt="Kogon shahar ixtisoslashtirilgan maktabi logo"
+      width={64}
+      height={64}
+      decoding="async"
       className={cn("rounded-sm object-contain", className)}
     />
   );
@@ -72,10 +74,10 @@ export function SiteHeader() {
           <Languages />
         </div>
       </div>
-      <div className="mx-auto flex min-h-16 max-w-6xl items-center justify-between gap-3 px-4 py-3 md:min-h-24 md:gap-4 md:px-6 md:py-4">
-        <Link to="/" onClick={close} className="flex min-w-0 items-center gap-2.5 md:gap-3">
-          <Logo className="size-9 shrink-0 md:h-14 md:w-auto" />
-          <span className="max-w-[190px] truncate font-serif text-[13px] font-semibold leading-tight sm:max-w-[240px] sm:text-sm md:max-w-[300px] md:text-xl">
+      <div className="mx-auto flex min-h-14 max-w-6xl items-center justify-between gap-3 px-4 py-2.5 md:min-h-20 md:gap-4 md:px-6 md:py-3">
+        <Link to="/" onClick={close} className="flex min-w-0 items-center gap-2 md:gap-2.5">
+          <Logo className="size-8 shrink-0 md:size-11" />
+          <span className="max-w-[180px] truncate text-[11px] font-semibold leading-tight tracking-tight sm:max-w-[250px] sm:text-xs md:max-w-[330px] md:text-base">
             {t("school")}
           </span>
         </Link>
@@ -113,7 +115,7 @@ export function SiteHeader() {
         </nav>
         <Button
           variant="ghost"
-          className="size-10 shrink-0 rounded-md hover:bg-primary-foreground/10 hover:text-primary-foreground md:size-11 xl:hidden"
+          className="flex size-9 shrink-0 items-center justify-center rounded-md border border-primary-foreground/20 bg-primary-foreground/5 hover:bg-primary-foreground/10 hover:text-primary-foreground md:size-10 xl:hidden"
           aria-label={t(open ? "closeMenu" : "menu")}
           aria-expanded={open}
           aria-controls="school-nav"
@@ -128,17 +130,33 @@ export function SiteHeader() {
           className="border-t border-primary-foreground/15 px-4 pb-3 xl:hidden"
           aria-label={t("quickLinks")}
         >
-          <Link onClick={close} to="/" className="flex min-h-12 items-center">
+          <Link
+            onClick={close}
+            to="/"
+            className="flex min-h-11 items-center border-b border-primary-foreground/10 text-sm font-medium last:border-b-0"
+          >
             {t("home")}
           </Link>
-          <Link onClick={close} to="/items" className="flex min-h-12 items-center">
+          <Link
+            onClick={close}
+            to="/items"
+            className="flex min-h-11 items-center border-b border-primary-foreground/10 text-sm font-medium last:border-b-0"
+          >
             {t("browse")}
           </Link>
-          <Link onClick={close} to="/my-reports" className="flex min-h-12 items-center">
+          <Link
+            onClick={close}
+            to="/my-reports"
+            className="flex min-h-11 items-center border-b border-primary-foreground/10 text-sm font-medium last:border-b-0"
+          >
             {t("myReports")}
           </Link>
           {isAdmin && (
-            <Link onClick={close} to="/admin" className="flex min-h-12 items-center">
+            <Link
+              onClick={close}
+              to="/admin"
+              className="flex min-h-11 items-center border-b border-primary-foreground/10 text-sm font-medium last:border-b-0"
+            >
               {t("admin")}
             </Link>
           )}
@@ -158,7 +176,12 @@ export function SiteHeader() {
           >
             {t("iFound")}
           </Link>
-          <Link onClick={close} to="/" hash="contact" className="flex min-h-12 items-center">
+          <Link
+            onClick={close}
+            to="/"
+            hash="contact"
+            className="flex min-h-11 items-center border-b border-primary-foreground/10 text-sm font-medium last:border-b-0"
+          >
             {t("contactUs")}
           </Link>
           {user ? (
@@ -172,7 +195,11 @@ export function SiteHeader() {
               {t("logout")}
             </button>
           ) : (
-            <Link onClick={close} to="/login" className="flex min-h-12 items-center">
+            <Link
+              onClick={close}
+              to="/login"
+              className="flex min-h-11 items-center border-b border-primary-foreground/10 text-sm font-medium last:border-b-0"
+            >
               {t("login")}
             </Link>
           )}
