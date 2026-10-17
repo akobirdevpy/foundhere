@@ -4,6 +4,7 @@ export type Lang = "uz" | "ru" | "en";
 
 const D = {
   school: { uz: "Kogon shahar ixtisoslashtirilgan maktabi", ru: "Специализированная школа города Каган", en: "Kogon City Specialized School" },
+  schoolShort: { uz: "Kogon ixtisoslashtirilgan maktab", ru: "Специализированная школа Кагана", en: "Kogon Specialized School" },
   subLabel: { uz: "Yo'qolgan va topilgan narsalar", ru: "Бюро находок", en: "Lost & found" },
   heroTitle: { uz: "Yo'qolgan narsangizni birga topamiz", ru: "Вместе найдём вашу потерянную вещь", en: "Let's find your lost item together" },
   heroSub: { uz: "Kogon ixtisoslashtirilgan maktabi — Topilmalar markazi", ru: "Каганская специализированная школа — Бюро находок", en: "Kogon Specialized School — Lost & Found Center" },
