@@ -44,7 +44,7 @@ function Languages() {
           aria-label={{ uz: "O‘zbekcha", ru: "Русский", en: "English" }[l]}
           aria-pressed={lang === l}
           className={cn(
-            "h-10 min-w-10 rounded-sm px-2 text-xs uppercase hover:bg-primary-foreground/10 hover:text-primary-foreground",
+            "h-8 min-w-8 rounded-sm px-1.5 text-[10px] uppercase hover:bg-primary-foreground/10 hover:text-primary-foreground md:h-10 md:min-w-10 md:px-2 md:text-xs",
             lang === l
               ? "font-semibold text-accent underline decoration-accent underline-offset-8"
               : "text-primary-foreground/75",
@@ -65,17 +65,17 @@ export function SiteHeader() {
   return (
     <header className="relative z-30 bg-primary text-primary-foreground">
       <div className="border-b border-primary-foreground/15">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 md:px-6">
-          <span className="text-[11px] font-medium uppercase tracking-normal text-primary-foreground/75">
+        <div className="mx-auto flex min-h-8 max-w-6xl items-center justify-between gap-3 px-4 md:min-h-9 md:px-6">
+          <span className="truncate text-[9px] font-medium uppercase tracking-[0.08em] text-primary-foreground/75 sm:text-[10px]">
             {t("officialService")}
           </span>
           <Languages />
         </div>
       </div>
-      <div className="mx-auto flex min-h-20 max-w-6xl items-center justify-between gap-4 px-4 py-4 md:min-h-24 md:px-6">
-        <Link to="/" onClick={close} className="flex min-w-0 items-center gap-3">
-          <Logo className="h-12 w-auto shrink-0 md:h-14" />
-          <span className="max-w-[224px] font-serif text-sm font-semibold leading-snug md:max-w-[300px] md:text-xl">
+      <div className="mx-auto flex min-h-16 max-w-6xl items-center justify-between gap-3 px-4 py-3 md:min-h-24 md:gap-4 md:px-6 md:py-4">
+        <Link to="/" onClick={close} className="flex min-w-0 items-center gap-2.5 md:gap-3">
+          <Logo className="size-9 shrink-0 md:h-14 md:w-auto" />
+          <span className="max-w-[190px] truncate font-serif text-[13px] font-semibold leading-tight sm:max-w-[240px] sm:text-sm md:max-w-[300px] md:text-xl">
             {t("school")}
           </span>
         </Link>
@@ -113,7 +113,7 @@ export function SiteHeader() {
         </nav>
         <Button
           variant="ghost"
-          className="h-11 w-11 shrink-0 hover:bg-primary-foreground/10 hover:text-primary-foreground xl:hidden"
+          className="size-10 shrink-0 rounded-md hover:bg-primary-foreground/10 hover:text-primary-foreground md:size-11 xl:hidden"
           aria-label={t(open ? "closeMenu" : "menu")}
           aria-expanded={open}
           aria-controls="school-nav"
@@ -125,7 +125,7 @@ export function SiteHeader() {
       {open && (
         <nav
           id="school-nav"
-          className="border-t border-primary-foreground/15 px-4 pb-4 xl:hidden"
+          className="border-t border-primary-foreground/15 px-4 pb-3 xl:hidden"
           aria-label={t("quickLinks")}
         >
           <Link onClick={close} to="/" className="flex min-h-12 items-center">
@@ -146,7 +146,7 @@ export function SiteHeader() {
             onClick={close}
             to="/post"
             search={{ kind: "lost" }}
-            className="flex min-h-12 items-center"
+            className="flex min-h-11 items-center border-b border-primary-foreground/10 text-sm font-medium last:border-b-0"
           >
             {t("iLost")}
           </Link>
@@ -154,7 +154,7 @@ export function SiteHeader() {
             onClick={close}
             to="/post"
             search={{ kind: "found" }}
-            className="flex min-h-12 items-center"
+            className="flex min-h-11 items-center border-b border-primary-foreground/10 text-sm font-medium last:border-b-0"
           >
             {t("iFound")}
           </Link>
@@ -167,7 +167,7 @@ export function SiteHeader() {
                 close();
                 void signOut();
               }}
-              className="flex min-h-12 items-center"
+              className="flex min-h-11 items-center border-b border-primary-foreground/10 text-sm font-medium last:border-b-0"
             >
               {t("logout")}
             </button>
@@ -193,7 +193,7 @@ export function SiteHeader() {
             key={label}
             to={to as any}
             search={search as any}
-            className="flex min-h-14 flex-col items-center justify-center gap-1 text-[10px] font-medium text-muted-foreground"
+            className="flex min-h-13 flex-col items-center justify-center gap-0.5 px-0.5 text-[9px] font-medium text-muted-foreground sm:text-[10px]"
           >
             <Icon className="h-5 w-5" />
             <span>{t(label)}</span>
