@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ItemCard } from "@/components/item-card";
 import { itemsQuery, type Item } from "@/lib/items";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
-import { supabase } from "@/integrations/supabase/client";
+import { DeleteReportDialog } from "@/components/delete-report-dialog";
 
 export const Route = createFileRoute("/my-reports")({ component: MyReportsPage });
 
@@ -17,25 +16,11 @@ function MyReportsPage() {
   const nav = useNavigate();
   const qc = useQueryClient();
   const { data = [], isLoading, isError, refetch } = useQuery(itemsQuery());
-  const [busy, setBusy] = useState<string | null>(null);
   const reports = user
     ? data.filter(
         (item) => (item as any).owner_user_id === user.id && !(item as any).owner_deleted_at,
       )
     : [];
-
-  async function remove(item: Item) {
-    if (!window.confirm(t("deleteConfirm"))) return;
-    setBusy(item.id);
-    const { error } = await (supabase.from("items") as any)
-      .update({ owner_deleted_at: new Date().toISOString(), deleted_by_owner: true })
-      .eq("id", item.id)
-      .eq("owner_user_id", user?.id);
-    setBusy(null);
-    if (error) return;
-    await qc.invalidateQueries({ queryKey: ["items"] });
-    nav({ to: "/my-reports" });
-  }
 
   if (loading) return <main className="mx-auto max-w-6xl px-4 py-10">{t("loading")}</main>;
   if (!user)
@@ -71,14 +56,11 @@ function MyReportsPage() {
                   {t("edit")}
                 </Link>
               </Button>
-              <Button
-                variant="outline"
-                className="flex-1"
-                disabled={busy === item.id}
-                onClick={() => remove(item)}
-              >
-                {busy === item.id ? t("sending") : t("delete")}
-              </Button>
+              <DeleteReportDialog
+                itemId={item.id}
+                photoPath={item.photo_url}
+                onDeleted={() => qc.invalidateQueries({ queryKey: ["items"] })}
+              />
             </div>
           </article>
         ))}

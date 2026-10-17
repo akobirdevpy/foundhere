@@ -7,15 +7,20 @@ create table if not exists public.item_matches (id uuid primary key default gen_
 create table if not exists public.notifications (id uuid primary key default gen_random_uuid(), user_id uuid references auth.users(id) on delete cascade, item_id uuid references public.items(id) on delete cascade, matched_item_id uuid references public.items(id) on delete cascade, kind text not null default 'match', read_at timestamptz, created_at timestamptz not null default now());
 create table if not exists public.claims (id uuid primary key default gen_random_uuid(), item_id uuid references public.items(id) on delete cascade, claimant_user_id uuid references auth.users(id) on delete cascade, status text not null default 'pending', created_at timestamptz not null default now());
 
--- One-time cleanup: remove claims, notifications, matches, item photos metadata, then reports.
--- Storage objects are deleted separately below because database DELETE cannot remove files from Storage.
-delete from public.claims;
-delete from public.notifications;
-delete from public.item_matches;
-delete from public.items;
+-- Ensure linked records cannot orphan when an item is deleted.
+alter table public.claims drop constraint if exists claims_item_id_fkey;
+alter table public.claims add constraint claims_item_id_fkey foreign key (item_id) references public.items(id) on delete cascade;
+alter table public.notifications drop constraint if exists notifications_item_id_fkey;
+alter table public.notifications add constraint notifications_item_id_fkey foreign key (item_id) references public.items(id) on delete cascade;
+alter table public.notifications drop constraint if exists notifications_matched_item_id_fkey;
+alter table public.notifications add constraint notifications_matched_item_id_fkey foreign key (matched_item_id) references public.items(id) on delete cascade;
+alter table public.item_matches drop constraint if exists item_matches_item_id_fkey;
+alter table public.item_matches add constraint item_matches_item_id_fkey foreign key (item_id) references public.items(id) on delete cascade;
+alter table public.item_matches drop constraint if exists item_matches_matched_item_id_fkey;
+alter table public.item_matches add constraint item_matches_matched_item_id_fkey foreign key (matched_item_id) references public.items(id) on delete cascade;
 
--- Remove every object in the item-photos bucket. This deletes report photos only.
-delete from storage.objects where bucket_id = 'item-photos';
+-- No data cleanup is performed here. Deleting an individual item through the app/API
+-- removes its linked rows by cascade; storage files are removed by the delete handler.
 
 create table if not exists public.user_roles (
   user_id uuid primary key references auth.users(id) on delete cascade,
@@ -82,6 +87,7 @@ drop policy if exists "authenticated read item photos" on storage.objects;
 create policy "authenticated read item photos" on storage.objects for select to authenticated using (bucket_id = 'item-photos');
 drop policy if exists "owners delete photos" on storage.objects;
 create policy "owners delete photos" on storage.objects for delete to authenticated using (bucket_id = 'item-photos' and ((storage.foldername(name))[1] = (select auth.uid())::text or public.is_admin()));
+-- New uploads must remain in the owner's folder; this makes direct API deletion owner-scoped too.
 
 alter table public.profiles enable row level security;
 drop policy if exists "profiles own row" on public.profiles;
@@ -89,5 +95,7 @@ create policy "profiles own row" on public.profiles for all to authenticated usi
 
 commit;
 
--- Exact effect: deletes all claims, match/notification rows, all item rows, and all files in item-photos.
--- User accounts, profiles, and auth identities are retained.
+-- Exact effect when run: creates/replaces idempotent role, admin-check, ownership,
+-- cascade, and storage policies. It does not delete existing data. User accounts,
+-- profiles, and auth identities are retained. Run this script in Supabase SQL Editor;
+-- it is safe to run twice.

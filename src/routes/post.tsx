@@ -71,7 +71,7 @@ function PostPage() {
         return;
       }
       if (file && file.size > 0) {
-        const path = `${crypto.randomUUID()}.${file.name.split(".").pop() ?? "jpg"}`;
+        const path = `${user.id}/${crypto.randomUUID()}.${file.name.split(".").pop() ?? "jpg"}`;
         const { error } = await supabase.storage
           .from("item-photos")
           .upload(path, file, { contentType: file.type });
