@@ -13,14 +13,14 @@ export function Logo({ className }: { className?: string }) {
   return <img src={logo.url} alt={t("school")} className={cn("rounded-sm object-contain", className)} />;
 }
 
-function Account() {
+function Account({ onNavigate }: { onNavigate?: () => void }) {
   const { t } = useI18n();
   const { user, name, isAdmin, ready } = useSessionUser();
   if (!ready) return null;
-  if (!user) return <Link to="/auth" className="flex min-h-10 items-center text-xs font-medium text-primary hover:text-muted-foreground">{t("signIn")}</Link>;
+  if (!user) return <Link to="/auth" onClick={onNavigate} className="flex min-h-10 items-center text-xs font-medium text-primary hover:text-muted-foreground">{t("signIn")}</Link>;
   return <div className="flex items-center gap-2 text-xs text-foreground">
     <span className="min-w-0 flex-1 truncate">{name}</span>
-    {isAdmin && <Link to="/admin" className="flex min-h-10 items-center text-xs font-medium text-accent">{t("admin")}</Link>}
+    {isAdmin && <Link to="/admin" onClick={onNavigate} className="flex min-h-10 items-center text-xs font-medium text-accent">{t("admin")}</Link>}
     <Button variant="ghost" onClick={() => supabase.auth.signOut()} className="h-10 rounded-sm px-2 text-xs hover:bg-secondary hover:text-foreground">{t("signOut")}</Button>
   </div>;
 }
@@ -60,7 +60,7 @@ export function SiteHeader() {
           <Link onClick={close} to="/post" search={{ kind: "found" }} className="flex min-h-11 items-center">{t("iFound")}</Link>
           <Link onClick={close} to="/" hash="contact" className="flex min-h-11 items-center">{t("contactUs")}</Link>
         </nav>
-        <div className="border-t pt-2"><Account /></div>
+        <div className="border-t pt-2"><Account onNavigate={close} /></div>
       </div>
     </div>}
   </header>;
