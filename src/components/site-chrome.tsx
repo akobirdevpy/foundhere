@@ -60,7 +60,7 @@ export function SiteHeader() {
           <Link onClick={close} to="/post" search={{ kind: "found" }} className="flex min-h-11 items-center">{t("iFound")}</Link>
           <Link onClick={close} to="/" hash="contact" className="flex min-h-11 items-center">{t("contactUs")}</Link>
         </nav>
-        <div className="border-t pt-2"><Account /></div>
+        <div className="border-t pt-2"><Account onNavigate={close} /></div>
       </div>
     </div>}
   </header>;
