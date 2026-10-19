@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X, MapPin, Phone, Mail, Clock, ArrowUpRight } from "lucide-react";
+import { Menu, X, MapPin, ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import logo from "@/assets/kogon-logo.png.asset.json";
 import { useI18n, type Lang } from "@/lib/i18n";
