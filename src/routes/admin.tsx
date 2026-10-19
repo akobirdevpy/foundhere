@@ -34,17 +34,15 @@ function AdminPage() {
     setLoadErr(false);
     const { data, error } = await supabase
       .from("admin_requests")
-      .select("id, user_id, created_at, profiles(display_name)")
+      .select("id, user_id, created_at")
       .order("created_at", { ascending: true });
     if (error) { setLoadErr(true); setRequests(null); return; }
-    setRequests(
-      (data ?? []).map((r) => ({
-        id: r.id,
-        user_id: r.user_id,
-        created_at: r.created_at,
-        name: (r.profiles as { display_name: string | null } | null)?.display_name ?? null,
-      })),
-    );
+    const ids = (data ?? []).map((r) => r.user_id);
+    const { data: profs } = ids.length
+      ? await supabase.from("profiles").select("id, display_name").in("id", ids)
+      : { data: [] as { id: string; display_name: string | null }[] };
+    const names = new Map((profs ?? []).map((p) => [p.id, p.display_name]));
+    setRequests((data ?? []).map((r) => ({ ...r, name: names.get(r.user_id) ?? null })));
   }
 
   useEffect(() => { if (isAdmin) load(); }, [isAdmin]);
