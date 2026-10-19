@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X, MapPin, Phone, Mail, Clock, ArrowUpRight } from "lucide-react";
+import { Menu, X, MapPin, ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import logo from "@/assets/kogon-logo.png.asset.json";
 import { useI18n, type Lang } from "@/lib/i18n";
@@ -15,10 +15,14 @@ export function Logo({ className }: { className?: string }) {
 
 function Account() {
   const { t } = useI18n();
-  const { user, name, ready } = useSessionUser();
+  const { user, name, isAdmin, ready } = useSessionUser();
   if (!ready) return null;
   if (!user) return <Link to="/auth" className="flex min-h-10 items-center text-xs font-medium text-primary hover:text-muted-foreground">{t("signIn")}</Link>;
-  return <div className="flex items-center gap-2 text-xs text-foreground"><span className="min-w-0 flex-1 truncate">{name}</span><Button variant="ghost" onClick={() => supabase.auth.signOut()} className="h-10 rounded-sm px-2 text-xs hover:bg-secondary hover:text-foreground">{t("signOut")}</Button></div>;
+  return <div className="flex items-center gap-2 text-xs text-foreground">
+    <span className="min-w-0 flex-1 truncate">{name}</span>
+    {isAdmin && <Link to="/admin" className="flex min-h-10 items-center text-xs font-medium text-accent">{t("admin")}</Link>}
+    <Button variant="ghost" onClick={() => supabase.auth.signOut()} className="h-10 rounded-sm px-2 text-xs hover:bg-secondary hover:text-foreground">{t("signOut")}</Button>
+  </div>;
 }
 
 function Languages({ footer = false }: { footer?: boolean }) {
@@ -74,7 +78,7 @@ export function SiteFooter() {
         <Link className="flex min-h-10 items-center justify-between" to="/post" search={{ kind: "found" }}>{t("postFound")}<ArrowUpRight className="h-3 w-3" /></Link>
       </nav></div>
       <div><h2 className="mb-5 font-sans text-sm font-semibold text-primary-foreground">{t("contactUs")}</h2><dl className="space-y-4 text-xs leading-relaxed text-primary-foreground/75">
-        {[{icon:MapPin,label:"address",value:"city"},{icon:Phone,label:"phone",value:"notProvided"},{icon:Mail,label:"email",value:"notProvided"},{icon:Clock,label:"workingHours",value:"confirmHours"}].map(({icon:Icon,label,value}) => <div key={label} className="flex gap-3"><Icon className="mt-0.5 h-4 w-4 shrink-0" /><div><dt className="font-medium text-primary-foreground">{t(label)}</dt><dd>{t(value)}</dd></div></div>)}
+        <div className="flex gap-3"><MapPin className="mt-0.5 h-4 w-4 shrink-0" /><div><dt className="font-medium text-primary-foreground">{t("address")}</dt><dd>{t("city")}</dd></div></div>
       </dl></div>
     </div>
     <div className="border-t border-primary-foreground/15"><div className="mx-auto flex max-w-[1100px] flex-col items-start justify-between gap-3 px-4 py-4 md:flex-row md:items-center md:px-6"><p className="text-xs leading-relaxed text-primary-foreground/65">© 2026 {t("school")}. {t("rightsReserved")}</p><Languages footer /></div></div>
