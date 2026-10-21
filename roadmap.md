@@ -1,7 +1,7 @@
 # Roadmap
 
-- [x] Enhance Google sign-in button: default (not blue) style with Google "G" logo
-- [x] Check logo renders correctly on every page
-- [x] Footer: remove phone, email, working hours
-- [x] Delete all current reports (items)
-- [x] Admin system: akobirsaidov023@gmail.com is first admin; admins approve other admins via request + approve flow
+- [ ] Contact: optional Telegram username + phone in report form; Call + Telegram buttons on item detail
+- [ ] Admin can delete reports (RLS policy + delete button on detail page)
+- [ ] Slimmer, professional browse filters
+- [ ] "Maktabdagi joy" becomes free-text input in form (relax DB constraint if needed)
+- [ ] Integrate tubelight-navbar (adapted to TanStack Router) as mobile bottom nav
